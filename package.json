@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "sync": "node sync.js",
-    "test": "node --test",
+    "test": "node --test test/calc.test.js",
     "smoke-test": "node scripts/smoke-test.js",
     "init-db": "node scripts/init-db.js",
     "backfill-recaps": "node scripts/backfill-recaps.js"
