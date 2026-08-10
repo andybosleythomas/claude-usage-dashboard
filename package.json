@@ -1,0 +1,26 @@
+{
+  "name": "claude-usage-dashboard",
+  "version": "1.0.0",
+  "description": "Database-backed dashboard for Claude Code session logs: cost, time, client billing, and productivity insights.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "sync": "node sync.js",
+    "test": "node --test",
+    "smoke-test": "node scripts/smoke-test.js",
+    "init-db": "node scripts/init-db.js",
+    "backfill-recaps": "node scripts/backfill-recaps.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/andybosleythomas/claude-usage-dashboard.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "better-sqlite3": "^13.0.3",
+    "express": "^5.2.1"
+  }
+}

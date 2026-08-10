@@ -1,0 +1,2363 @@
+<!doctype html>
+<title>Pulse — Claude Code usage &amp; billing</title>
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  color-scheme: light;
+  --surface-0: #ffffff;
+  --surface-1: #fcfcfb;
+  --surface-2: #f5f4f1;
+  --border: #e4e2dc;
+  --text-primary: #0b0b0b;
+  --text-secondary: #595959;
+  --text-muted: #82817c;
+  --brand-teal: #659595;
+  --brand-grey: #595959;
+  --series-1: #009999;
+  --series-2: #eb6834;
+  --series-3: #4a3aa7;
+  --series-4: #eda100;
+  --series-5: #82817c;
+  --seq-100: #cdeaea;
+  --seq-700: #0d4a4a;
+  --accent-bg: #eaf5f5;
+  --sans: 'Geist', -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  --mono: 'Geist Mono', ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    color-scheme: dark;
+    --surface-0: #121211;
+    --surface-1: #1a1a19;
+    --surface-2: #232322;
+    --border: #34332f;
+    --text-primary: #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted: #8f8e86;
+    --brand-teal: #7fb3b3;
+    --brand-grey: #c3c2b7;
+    --series-1: #22a09c;
+    --series-2: #d95926;
+    --series-3: #9085e9;
+    --series-4: #c98500;
+    --series-5: #8f8e86;
+    --seq-100: #1a5c5c;
+    --seq-700: #cdeaea;
+    --accent-bg: #122626;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --surface-0: #121211;
+  --surface-1: #1a1a19;
+  --surface-2: #232322;
+  --border: #34332f;
+  --text-primary: #ffffff;
+  --text-secondary: #c3c2b7;
+  --text-muted: #8f8e86;
+  --brand-teal: #7fb3b3;
+  --brand-grey: #c3c2b7;
+  --series-1: #22a09c;
+  --series-2: #d95926;
+  --series-3: #9085e9;
+  --series-4: #c98500;
+  --series-5: #8f8e86;
+  --seq-100: #1a5c5c;
+  --seq-700: #cdeaea;
+  --accent-bg: #122626;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--surface-0);
+  color: var(--text-primary);
+  font-family: var(--sans);
+  font-size: 14px;
+}
+
+/* ── shell: topbar / sidebar / main ─────────────────────── */
+.shell { display: flex; flex-direction: column; min-height: 100vh; }
+.topbar {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  padding: 13px 24px; border-bottom: 1px solid var(--border); background: var(--surface-1);
+}
+.shell-body { display: flex; align-items: flex-start; flex: 1; }
+.sidebar { width: 190px; flex: none; padding: 14px 0; display: flex; flex-direction: column; }
+.navsec { display: flex; flex-direction: column; margin-bottom: 14px; }
+.navsec h5 {
+  font-size: 0.86rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em;
+  color: var(--text-secondary); padding: 0 18px; margin: 0 0 4px; font-family: var(--sans);
+}
+.navsec-settings { margin-bottom: 0; padding-top: 10px; border-top: 1px solid var(--border); }
+.main { flex: 1; min-width: 0; padding: 24px 28px 64px; max-width: 1440px; }
+
+.header-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.brand-row { display: flex; align-items: center; gap: 12px; }
+.brand-wordmark { font-size: 1.05rem; font-weight: 700; letter-spacing: 0.01em; white-space: nowrap; }
+h1, h2, h3 { font-family: var(--sans); letter-spacing: -0.01em; }
+h1 { font-size: 1.05rem; margin: 0; font-weight: 600; }
+.crumb, .subtitle { color: var(--text-secondary); font-size: 0.82rem; }
+
+.filter-bar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+.filter-bar label { font-size: 0.8rem; color: var(--text-secondary); }
+select#monthFilter, select#repoFilter, select#clientFilter, select#invoiceClient, select#invoiceMonth {
+  background: var(--surface-1); color: var(--text-primary); border: 1px solid var(--border);
+  border-radius: 8px; padding: 7px 12px; font-size: 0.85rem; cursor: pointer;
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 32px;
+}
+.tile {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+.tile .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); }
+.tile .value { font-family: var(--mono); font-size: 1.4rem; font-weight: 600; margin-top: 2px; }
+
+section { margin-bottom: 40px; }
+h2 { font-size: 1.02rem; margin: 0 0 4px; }
+.section-note { color: var(--text-muted); font-size: 0.82rem; margin: 0 0 16px; }
+.empty-note { color: var(--text-muted); font-size: 0.85rem; padding: 16px 0; }
+
+.bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.bar-label {
+  width: 220px; flex-shrink: 0; font-size: 0.8rem; color: var(--text-secondary);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.bar-track { flex: 1; background: var(--surface-2); border-radius: 3px; height: 16px; position: relative; }
+.bar-fill { height: 100%; border-radius: 3px; background: var(--series-1); }
+.bar-value {
+  width: 90px; flex-shrink: 0; text-align: right; font-size: 0.8rem;
+  font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--text-primary);
+}
+
+svg { display: block; }
+.axis-label { fill: var(--text-muted); font-size: 10px; }
+.gridline { stroke: var(--border); stroke-width: 1; }
+.line-path { fill: none; stroke: var(--series-1); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.area-path { fill: var(--series-1); opacity: 0.12; }
+.dot { fill: var(--surface-0); stroke: var(--series-1); stroke-width: 2; }
+
+.legend { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 10px; font-size: 0.8rem; color: var(--text-secondary); }
+.legend-item { display: flex; align-items: center; gap: 6px; }
+.swatch { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+.model-bar { display: flex; height: 22px; border-radius: 4px; overflow: hidden; border: 1px solid var(--border); }
+.model-seg { height: 100%; }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--border); }
+th { color: var(--text-muted); font-weight: 500; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.03em; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+td.num { font-family: var(--mono); }
+
+/* Invoicing tab renders one <table> per repo/expense block; table-layout:
+   fixed + a shared colgroup keeps the Hours/Amount columns pinned to the
+   same x-position across every block instead of auto-sizing to that
+   block's own Day-column text length. */
+.invoice-table { table-layout: fixed; }
+
+.tooltip {
+  position: absolute; pointer-events: none; background: var(--surface-1);
+  border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px;
+  font-size: 0.78rem; color: var(--text-primary); box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  opacity: 0; transition: opacity 0.1s; white-space: nowrap; z-index: 10;
+}
+.chart-wrap { position: relative; }
+.hover-target { cursor: crosshair; }
+
+footer { color: var(--text-muted); font-size: 0.76rem; margin-top: 48px; border-top: 1px solid var(--border); padding-top: 16px; }
+
+.tab-btn {
+  display: block; width: 100%; text-align: left; background: none;
+  border: none; border-left: 3px solid transparent; border-radius: 0;
+  padding: 9px 18px 9px 26px; font-size: 0.86rem;
+  color: var(--text-secondary); cursor: pointer; font-family: inherit;
+}
+.tab-btn:hover { background: var(--accent-bg); }
+.tab-btn.active { background: var(--accent-bg); border-left-color: var(--series-1); color: var(--text-primary); font-weight: 600; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+.btn {
+  background: var(--surface-1); color: var(--text-primary); border: 1px solid var(--border);
+  border-radius: 8px; padding: 7px 12px; font-size: 0.82rem; cursor: pointer; font-family: inherit;
+}
+.btn:hover { background: var(--surface-2); }
+.btn-primary { background: var(--series-1); border-color: var(--series-1); color: #fff; }
+
+input[type="text"], input[type="number"] {
+  background: var(--surface-1); color: var(--text-primary); border: 1px solid var(--border);
+  border-radius: 6px; padding: 5px 8px; font-size: 0.82rem; font-family: inherit;
+}
+input[type="number"] { width: 80px; text-align: right; }
+
+.config-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+.config-row label { font-size: 0.8rem; color: var(--text-secondary); }
+.add-form { display: flex; align-items: flex-end; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+.add-form .field { display: flex; flex-direction: column; gap: 4px; }
+.add-form .field label { font-size: 0.72rem; color: var(--text-muted); }
+select.repo-client-select {
+  background: var(--surface-1); color: var(--text-primary); border: 1px solid var(--border);
+  border-radius: 6px; padding: 5px 8px; font-size: 0.82rem; cursor: pointer; font-family: inherit; min-width: 160px;
+}
+.link-btn { background: none; border: none; color: var(--series-2); cursor: pointer; font-size: 0.78rem; font-family: inherit; padding: 0; }
+.link-btn:hover { text-decoration: underline; }
+
+.live-note { font-size: 0.76rem; color: var(--text-muted); }
+
+.callout {
+  background: var(--surface-1); border: 1px solid var(--border); border-left: 3px solid var(--series-1);
+  border-radius: 6px; padding: 10px 14px; font-size: 0.85rem; margin-bottom: 16px;
+}
+.callout-warn { border-left-color: var(--series-2); }
+
+#toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(10px);
+  background: var(--text-primary); color: var(--surface-0); padding: 8px 16px; border-radius: 8px;
+  font-size: 0.82rem; opacity: 0; pointer-events: none; transition: opacity 0.15s, transform 0.15s; z-index: 100;
+}
+#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+.invoice-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+
+.recap-card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; margin-bottom: 14px; }
+.recap-card-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+.recap-card h3 { margin: 0; font-size: 1rem; }
+.recap-badge { font-size: 0.7rem; color: var(--text-muted); background: var(--surface-2); border-radius: 99px; padding: 2px 8px; white-space: nowrap; }
+.recap-stats { display: flex; gap: 16px; flex-wrap: wrap; font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 4px; }
+.recap-section-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); margin: 12px 0 4px; }
+.recap-list { margin: 0; padding-left: 18px; font-size: 0.85rem; }
+.recap-list li { margin-bottom: 4px; }
+.recap-commit-hash { font-family: ui-monospace, Consolas, monospace; color: var(--text-muted); font-size: 0.78rem; }
+.recap-mem-type { font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.03em; }
+tfoot td { border-bottom: none; border-top: 1px solid var(--border); padding-top: 8px; }
+
+/* Time tab: it's a data-entry grid meant to be scanned/edited quickly, one
+   row per repo per day -- denser than a report table. */
+#tab-time table th, #tab-time table td { padding: 3px 6px; }
+#tab-time input[type="text"], #tab-time input[type="number"] { padding: 3px 6px; font-size: 0.8rem; }
+#tab-time #timeRepoTable input[type="text"] { width: 100%; box-sizing: border-box; }
+#tab-time #timeRepoTable input[type="number"] { width: 100%; box-sizing: border-box; }
+#tab-time #timeRepoTable td:nth-child(1), #tab-time #timeRepoTable td:nth-child(2) {
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 0;
+}
+#tab-time #timeRepoTable th.num-center, #tab-time #timeRepoTable td.num-center { text-align: center; }
+#tab-time #timeRepoTable tr[data-kind="client"] { background: var(--surface-2); }
+#tab-time #timeRepoTable td.num-center input { text-align: center; }
+#tab-time .add-form { margin-top: 10px; gap: 8px; }
+
+@media print {
+  .no-print { display: none !important; }
+  body { padding: 0; }
+  .tab-panel { display: none !important; }
+  .tab-panel.active { display: block !important; }
+}
+</style>
+
+<div class="shell">
+  <div id="toast"></div>
+  <div class="topbar">
+    <div class="brand-row">
+      <span class="brand-wordmark" style="color:var(--brand-teal)">Pulse</span>
+      <h1>Pulse</h1>
+    </div>
+    <span class="crumb" id="subtitle">Loading…</span>
+  </div>
+  <div class="shell-body">
+    <nav class="sidebar no-print">
+      <div class="navsec">
+        <h5>Daily</h5>
+        <button class="tab-btn active" data-tab="recap">Recap</button>
+        <button class="tab-btn" data-tab="time">Time</button>
+      </div>
+      <div class="navsec">
+        <h5>Reporting</h5>
+        <button class="tab-btn" data-tab="dashboard">Dashboard</button>
+        <button class="tab-btn" data-tab="insights">Insights</button>
+        <button class="tab-btn" data-tab="things-to-try">Things to Try</button>
+        <button class="tab-btn" data-tab="report">Client Report</button>
+      </div>
+      <div class="navsec">
+        <h5>End of Month</h5>
+        <button class="tab-btn" data-tab="invoicing">Invoicing</button>
+        <button class="tab-btn" data-tab="expenses">Expenses</button>
+      </div>
+      <div class="navsec navsec-settings">
+        <button class="tab-btn" data-tab="settings">Settings</button>
+      </div>
+    </nav>
+    <div class="main">
+    <div class="filter-bar no-print" id="globalFilterBar">
+      <label for="clientFilter">Client</label>
+      <select id="clientFilter"></select>
+      <label for="repoFilter">Repo</label>
+      <select id="repoFilter"></select>
+      <label for="monthFilter">Month</label>
+      <select id="monthFilter"></select>
+      <span class="live-note">● live — edits save instantly</span>
+    </div>
+
+  <div id="tab-recap" class="tab-panel active">
+    <div class="header-row" style="margin-bottom: 20px;">
+      <div>
+        <h2 style="margin-bottom:2px;" id="recapHeading">Yesterday</h2>
+        <p class="section-note" id="recapSubnote" style="margin-bottom:0;">Loading…</p>
+      </div>
+      <div class="no-print" style="display:flex; align-items:center; gap:10px;">
+        <span class="live-note" id="syncStatus"></span>
+        <button class="btn btn-primary" id="syncNowBtn" title="Runs node sync.js -- pulls today's chatting into the database before you close for the night">Run DB sync</button>
+      </div>
+    </div>
+    <div id="recapTiles" class="tiles"></div>
+    <div id="recapProjects"></div>
+  </div>
+
+  <div id="tab-dashboard" class="tab-panel">
+
+  <div class="tiles" id="tiles"></div>
+
+  <section>
+    <h2>My time by client</h2>
+    <p class="section-note">Your time, valued at each client's configured hourly rates — includes any Adjustment/Manual overrides from the Time tab. Repos not yet assigned to a client show as "Unassigned" (\$0) — assign them on the Settings tab.</p>
+    <div id="clientBars"></div>
+    <div id="clientLevelTimeWrap" style="display:none;margin-top:16px;">
+      <p class="section-note" style="margin-bottom:8px;">Client-level time (no repo) in this period — from the Time tab:</p>
+      <table id="clientLevelTimeTable">
+        <thead><tr><th>Date</th><th>Client</th><th class="num">Hours</th><th>Note</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Cost by repo</h2>
+    <p class="section-note">Token cost is modeled from local session-file token usage (input/output/cache) at first-party API list pricing. My cost is your time at the assigned client's hourly rates. Actual API billing may differ (subscription plan, discounts, exact cache TTL split).</p>
+    <div class="legend">
+      <div class="legend-item"><span class="swatch" style="background:var(--series-1)"></span>Token cost</div>
+      <div class="legend-item"><span class="swatch" style="background:var(--series-2)"></span>My cost</div>
+    </div>
+    <div class="chart-wrap" id="repoBars" style="margin-top:12px"></div>
+    <div class="tooltip" id="repoBarsTooltip"></div>
+  </section>
+
+  <section>
+    <h2>Daily activity timeline</h2>
+    <p class="section-note">Estimated spend and message volume per day, across every repo.</p>
+    <div class="chart-wrap" id="timelineChart"></div>
+    <div class="tooltip" id="timelineTooltip"></div>
+  </section>
+
+  <section>
+    <h2>Daily working hours</h2>
+    <p class="section-note">First-to-last message time per day (Brisbane time, combined across repos), plus "active" hours — time actually spent chatting, counting only gaps of 20 minutes or less between messages within a repo (so overnight/long-idle gaps don't inflate the total).</p>
+    <div class="chart-wrap" id="dailyTimeChart"></div>
+    <div class="tooltip" id="dailyTimeTooltip"></div>
+    <div class="legend">
+      <div class="legend-item"><span class="swatch" style="background:var(--seq-100)"></span>Full span (first msg → last msg)</div>
+      <div class="legend-item"><span class="swatch" style="background:var(--series-1)"></span>Active chatting time</div>
+    </div>
+    <p class="section-note" id="dailyTimeSummary" style="margin-top:10px"></p>
+  </section>
+
+  <section>
+    <h2>Model mix</h2>
+    <p class="section-note">Assistant messages by model, for the selected period.</p>
+    <div id="modelBar"></div>
+    <div class="legend" id="modelLegend"></div>
+  </section>
+
+  <section>
+    <div style="display:flex;justify-content:space-between;align-items:baseline">
+      <h2>Full breakdown</h2>
+      <button class="btn no-print" id="downloadTableCsvBtn">Download CSV</button>
+    </div>
+    <table id="repoTable">
+      <thead>
+        <tr><th>Repo</th><th>Client</th><th class="num">Sessions</th><th class="num">Messages</th><th class="num">Hours chatting</th><th>First</th><th>Last</th><th class="num">Token cost</th><th class="num">My time</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  </div>
+
+  <div id="tab-insights" class="tab-panel">
+    <section>
+      <h2>Cost anomaly &amp; forecast</h2>
+      <p class="section-note">Anomaly: today's cost vs. a same-weekday trailing baseline (z-score + a $20 floor, so quiet days don't get flagged). Forecast: a straight run-rate projection for the current calendar month, Azure/AWS-Cost-Explorer-style — not a budget, just today's pace extrapolated.</p>
+      <div id="anomalyBanner"></div>
+      <div class="tiles" id="forecastTiles"></div>
+    </section>
+    <section>
+      <h2>Cache efficiency</h2>
+      <p class="section-note">Prompt caching serves repeated context from cache instead of full-price input tokens. Estimated savings use a blended input-token price across the models seen in this period — a rough figure, not an exact bill.</p>
+      <div class="tiles" id="cacheTiles"></div>
+      <p class="section-note" style="margin-top:16px">Approximate cost by token type (same blended-price caveat applies):</p>
+      <div id="cacheCostBars"></div>
+    </section>
+    <section>
+      <h2>Cost per commit</h2>
+      <p class="section-note">Detected by pattern-matching <code>git commit</code> inside logged Bash commands — a rough proxy, not a git-log-verified count. Select a single repo (not "All repos") to see verified commits below, straight from <code>git log</code>.</p>
+      <div class="tiles" id="commitTiles"></div>
+      <div id="recentCommits"></div>
+    </section>
+    <section>
+      <h2>Focus ratio</h2>
+      <p class="section-note">Active chatting time as a share of full first-to-last session span — a proxy for how much of your "online" time was spent actually working vs. idling between messages.</p>
+      <div class="tiles" id="focusTiles"></div>
+      <div id="manualEquivalentNote" class="section-note"></div>
+      <p class="section-note" style="margin-top:16px">Within that active time, a rough split of what it went on:</p>
+      <div id="cycleTimeBars"></div>
+    </section>
+    <section>
+      <h2>Utilization</h2>
+      <p class="section-note">Billable (assigned to a client with a nonzero rate) vs. non-billable active hours. Harvest's professional-services benchmark is 65–80% billable — 20–35% non-billable overhead is normal, not a problem to eliminate. See RESEARCH.md re: the "hourly billing efficiency penalty" — as AI speeds up billable work, watch this number trend, not just its current value.</p>
+      <div class="tiles" id="utilizationTiles"></div>
+    </section>
+    <section>
+      <h2>Streaks</h2>
+      <p class="section-note">Consecutive-day activity, for the current filter (client/repo apply, month does not — a streak spans months).</p>
+      <div class="tiles" id="streakTiles"></div>
+    </section>
+    <section>
+      <h2>Investment by client over time</h2>
+      <p class="section-note">Token + my-time cost per client, by month — a proxy for "investment profile" charts used by engineering-intelligence platforms (LinearB, Jellyfish, Swarmia), derived from repo→client assignment rather than git/PR/issue-tracker data we don't have.</p>
+      <div class="chart-wrap" id="investmentChart"></div>
+      <div class="tooltip" id="investmentTooltip"></div>
+      <div class="legend" id="investmentLegend"></div>
+    </section>
+    <section>
+      <h2>Tool usage mix</h2>
+      <p class="section-note">Which tools Claude Code reached for most in this period, plus a taxonomy view (code-changing vs. investigative vs. execution vs. orchestration vs. external).</p>
+      <div id="toolTaxonomyBars"></div>
+      <p class="section-note" style="margin-top:16px">By individual tool:</p>
+      <div id="toolMixBars"></div>
+    </section>
+    <section>
+      <h2>Rework signal</h2>
+      <p class="section-note">Files revisited across 3+ distinct days — a proxy for DORA's "rework rate" (rebuilt from file-touch data since we don't ingest git history). High revisit counts aren't inherently bad; they're a prompt to look closer, not a verdict.</p>
+      <div class="tiles" id="reworkTiles"></div>
+      <table id="reworkTable"><thead><tr><th>File</th><th>Repo</th><th class="num">Distinct days touched</th></tr></thead><tbody></tbody></table>
+    </section>
+    <section>
+      <h2>Hot files</h2>
+      <p class="section-note">Most-touched files (Read/Write/Edit/NotebookEdit) — a proxy for where the real complexity or churn lives.</p>
+      <table id="hotFilesTable"><thead><tr><th>File</th><th class="num">Touches</th></tr></thead><tbody></tbody></table>
+    </section>
+  </div>
+
+  <div id="tab-things-to-try" class="tab-panel">
+    <section>
+      <h2>Things to try</h2>
+      <p class="section-note">Not a report — nudges. Each card is triggered by an actual pattern in this period's tool-call mix (not generic advice), pointing at a specific Claude Code capability that looks like a fit for the work already happening here. Filter by client/repo/month above to scope it.</p>
+      <div id="thingsToTryCards"></div>
+    </section>
+    <section>
+      <h2>By repo</h2>
+      <p class="section-note">Tool-call mix per repo this period. "Signal" flags repos whose usage pattern looks like a fit for one of the cards above — it's a heuristic, not a verdict.</p>
+      <table id="thingsToTryRepoTable">
+        <thead><tr><th>Repo</th><th class="num">Tool calls</th><th class="num">Investigative %</th><th class="num">Orchestration %</th><th class="num">Research %</th><th>Signal</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </div>
+
+  <div id="tab-invoicing" class="tab-panel">
+    <section>
+      <p class="section-note no-print">Itemized by repo and day: active-chat hours at the active rate, plus remaining session span at the idle rate. For your own records — not a legal invoice template.</p>
+      <div class="config-row no-print">
+        <label for="invoiceClient">Client</label>
+        <select id="invoiceClient"></select>
+        <label for="invoiceMonth">Month</label>
+        <select id="invoiceMonth"></select>
+        <button class="btn btn-primary" id="generateInvoiceBtn">Generate</button>
+        <button class="btn no-print" id="printInvoiceBtn" style="display:none">Print / Save as PDF</button>
+        <button class="btn no-print" id="downloadInvoiceCsvBtn" style="display:none">Download CSV</button>
+      </div>
+      <div id="invoiceOutput"></div>
+    </section>
+  </div>
+
+  <div id="tab-report" class="tab-panel">
+    <section>
+      <p class="section-note no-print">A clean summary of the work delivered — for sending to the client, not for your own billing math. Dollar figures are off by default; the point is the work, not the invoice (see the Invoicing tab for that).</p>
+      <div class="config-row no-print">
+        <label for="reportClient">Client</label>
+        <select id="reportClient"></select>
+        <label for="reportMonth">Month</label>
+        <select id="reportMonth"></select>
+        <label style="display:flex;align-items:center;gap:4px;cursor:pointer"><input type="checkbox" id="reportIncludeCost"> Include cost figures</label>
+        <button class="btn btn-primary" id="generateReportBtn">Generate</button>
+        <button class="btn no-print" id="printReportBtn" style="display:none">Print / Save as PDF</button>
+      </div>
+      <div id="reportOutput"></div>
+    </section>
+  </div>
+
+  <div id="tab-settings" class="tab-panel">
+    <section>
+      <h2>Clients</h2>
+      <p class="section-note">Set each client's hourly rates. "Manual multiplier" feeds the Insights tab's adjustable est.-manual-equivalent figure (an assumption, not a measurement — see Insights). "Rounding" is the invoice line-item rounding increment. Changes save to the database immediately.</p>
+      <table id="clientsTable">
+        <thead>
+          <tr><th>Client</th><th class="num">Active rate ($/hr)</th><th class="num">Idle rate ($/hr)</th><th class="num">Manual multiplier</th><th class="num">Rounding (min)</th><th></th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div class="add-form">
+        <div class="field"><label for="newClientName">Client name</label><input type="text" id="newClientName" placeholder="e.g. New Client"></div>
+        <div class="field"><label for="newClientActive">Active $/hr</label><input type="number" id="newClientActive" value="175"></div>
+        <div class="field"><label for="newClientIdle">Idle $/hr</label><input type="number" id="newClientIdle" value="75"></div>
+        <div class="field"><label for="newClientMultiplier">Manual multiplier</label><input type="number" id="newClientMultiplier" value="1.5" step="0.1"></div>
+        <div class="field"><label for="newClientRounding">Rounding (min)</label><input type="number" id="newClientRounding" value="15" step="1"></div>
+        <button class="btn btn-primary" id="addClientBtn">Add client</button>
+      </div>
+    </section>
+
+    <section>
+      <h2>Assign repos to clients</h2>
+      <p class="section-note">Every project directory found under <code>~/.claude/projects</code> — including any new ones since the last sync — shows up here. Pick a client for each; unassigned repos count as \$0 in cost calculations. Changes save to the database immediately.</p>
+      <table id="mappingTable">
+        <thead>
+          <tr><th>Repo</th><th>Client</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </div>
+
+  <div id="tab-time" class="tab-panel">
+    <section>
+      <p class="section-note">Auto comes from Claude Code session logs. Adjustment replaces that day's auto total when it's wrong; Manual adds separate non-Claude time (meetings, planning) on top of it. Just enter the number of hours — no start/finish times. Changes save on blur.</p>
+      <div class="config-row">
+        <label for="timeDate">Date</label>
+        <button type="button" class="btn" id="timePrevDayBtn" title="Previous day" aria-label="Previous day">‹</button>
+        <input type="date" id="timeDate">
+        <button type="button" class="btn" id="timeNextDayBtn" title="Next day" aria-label="Next day">›</button>
+        <label style="display:flex;align-items:center;gap:4px;cursor:pointer"><input type="checkbox" id="timeShowAll"> Show all repos (including 0h)</label>
+        <span class="live-note" id="timeDayTotal"></span>
+      </div>
+      <table id="timeRepoTable">
+        <colgroup>
+          <col style="width:11%"><col style="width:9%"><col style="width:9%">
+          <col style="width:4%"><col style="width:4%"><col style="width:13%"><col style="width:50%">
+        </colgroup>
+        <thead><tr><th>Repo</th><th>Client</th><th class="num num-center">Modelling</th><th class="num num-center">Adj</th><th class="num num-center">Manual</th><th>Note</th><th>Summary (shown on invoice)</th></tr></thead>
+        <tbody></tbody>
+        <tfoot></tfoot>
+      </table>
+
+      <div class="add-form">
+        <div class="field"><label for="newTimeClient">Client</label><select id="newTimeClient"></select></div>
+        <div class="field"><label for="newTimeHours">Hours</label><input type="number" id="newTimeHours" step="0.25" min="0"></div>
+        <div class="field"><label for="newTimeNote">Note</label><input type="text" id="newTimeNote" placeholder="e.g. Client meeting"></div>
+        <button class="btn btn-primary" id="addTimeClientBtn">Add / update</button>
+      </div>
+    </section>
+  </div>
+
+  <div id="tab-expenses" class="tab-panel">
+    <section>
+      <p class="section-note">Client-incurred costs — travel, subscriptions, software. Recurring expenses auto-generate their next occurrence, up to today, every time this tab loads.</p>
+      <div class="config-row">
+        <label for="expenseClient">Client</label>
+        <select id="expenseClient"></select>
+        <label for="expenseMonth">Month</label>
+        <select id="expenseMonth"></select>
+        <span class="live-note" id="expenseTotal"></span>
+        <button class="btn no-print" id="downloadExpensesCsvBtn">Download CSV</button>
+      </div>
+      <table id="expensesTable">
+        <thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Repo</th><th class="num">Amount</th><th></th><th></th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div class="add-form">
+        <div class="field"><label for="newExpenseDate">Date</label><input type="date" id="newExpenseDate"></div>
+        <div class="field"><label for="newExpenseCategory">Category</label>
+          <select id="newExpenseCategory">
+            <option>Travel</option><option>Subscription</option><option>Software</option><option>Equipment</option><option>Other</option>
+          </select>
+        </div>
+        <div class="field"><label for="newExpenseDescription">Description</label><input type="text" id="newExpenseDescription" placeholder="e.g. Flight to site visit"></div>
+        <div class="field"><label for="newExpenseRepo">Repo (optional)</label><select id="newExpenseRepo"><option value="">—</option></select></div>
+        <div class="field"><label for="newExpenseAmount">Amount ($)</label><input type="number" id="newExpenseAmount" step="0.01" min="0"></div>
+        <div class="field"><label style="display:flex;align-items:center;gap:4px;cursor:pointer"><input type="checkbox" id="newExpenseRecurring"> Recurring</label></div>
+        <div class="field" id="newExpenseIntervalField" style="display:none">
+          <label for="newExpenseInterval">Every</label>
+          <select id="newExpenseInterval"><option value="monthly">Month</option><option value="weekly">Week</option><option value="yearly">Year</option></select>
+        </div>
+        <div class="field" id="newExpenseEndField" style="display:none">
+          <label for="newExpenseEndDate">Ends (optional)</label>
+          <input type="date" id="newExpenseEndDate">
+        </div>
+        <button class="btn btn-primary" id="addExpenseBtn">Add expense</button>
+      </div>
+    </section>
+  </div>
+
+  <footer class="no-print">Backed by a local SQLite database (<code>data/claude_usage_dashboard.sqlite</code>), sourced from <code>~/.claude/projects/*/*.jsonl</code>. Run <code>node sync.js</code> to pull in the latest sessions. Cost model: input/output/cache-write/cache-read tokens × published per-model list pricing. Source: see repo README.</footer>
+    </div>
+  </div>
+</div>
+
+<script>
+const UNASSIGNED = 'Unassigned';
+const fmtUsd = n => '$' + n.toLocaleString(undefined, {maximumFractionDigits: 0});
+const fmtUsd2 = n => '$' + n.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+const fmtInt = n => n.toLocaleString();
+const MONTH_NAMES = {'01':'January','02':'February','03':'March','04':'April','05':'May','06':'June','07':'July','08':'August','09':'September','10':'October','11':'November','12':'December'};
+function monthLabel(m) { const [y, mm] = m.split('-'); return `${MONTH_NAMES[mm]} ${y}`; }
+function currentMonthKey() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+}
+function repoDisplayName(repo) {
+  if (/^C--WINDOWS-system32$/i.test(repo)) return 'system32 (stray sessions)';
+  if (/^C--code$/i.test(repo)) return 'C:\\code (root)';
+  return repo.replace(/^c--code-/i, '').replace(/^C--code-?/i, '');
+}
+
+let RECORDS = [], REPO_MONTH_SESSIONS = {}, REPO_ALLTIME_SESSIONS = {};
+let CLIENT_LEVEL_TIME = [];
+let CLIENTS = {}, REPO_CLIENT = {};
+let repoList = [], months = [];
+
+function applyClientsConfig(cfg) {
+  CLIENTS = cfg.clients || {};
+  REPO_CLIENT = cfg.repoClients || {};
+}
+function getClientRates(clientName) {
+  if (clientName === UNASSIGNED || !CLIENTS[clientName]) return { activeRate: 0, idleRate: 0 };
+  return CLIENTS[clientName];
+}
+function getRepoClient(repo) { return REPO_CLIENT[repo] || UNASSIGNED; }
+function recordMyTime(r) {
+  const rates = getClientRates(getRepoClient(r.repo));
+  return r.activeHours * rates.activeRate + Math.max(r.spanHours - r.activeHours, 0) * rates.idleRate;
+}
+
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => el.classList.remove('show'), 1600);
+}
+async function postJSON(url, body) {
+  const r = await fetch(url, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body) });
+  if (!r.ok) { const e = await r.json().catch(() => ({error: r.statusText})); throw new Error(e.error || 'Request failed'); }
+  return r.json();
+}
+async function deleteJSON(url) {
+  const r = await fetch(url, { method: 'DELETE' });
+  if (!r.ok) { const e = await r.json().catch(() => ({error: r.statusText})); throw new Error(e.error || 'Request failed'); }
+  return r.json();
+}
+
+const monthSelect = document.getElementById('monthFilter');
+const clientSelect = document.getElementById('clientFilter');
+const repoSelect = document.getElementById('repoFilter');
+
+function setupMonthFilter() {
+  const prior = monthSelect.value;
+  monthSelect.innerHTML = ['<option value="all">All time</option>']
+    .concat(months.map(m => `<option value="${m}">${monthLabel(m)}</option>`))
+    .join('');
+  const cur = currentMonthKey();
+  monthSelect.value = (prior && months.includes(prior)) ? prior : (months.includes(cur) ? cur : 'all');
+}
+function refreshClientFilterOptions() {
+  const prior = clientSelect.value || 'all';
+  const clientNames = Object.keys(CLIENTS);
+  clientSelect.innerHTML = ['<option value="all">All clients</option>']
+    .concat(clientNames.map(c => `<option value="${c}">${c}</option>`))
+    .concat([`<option value="${UNASSIGNED}">${UNASSIGNED}</option>`])
+    .join('');
+  clientSelect.value = (prior === 'all' || clientNames.includes(prior) || prior === UNASSIGNED) ? prior : 'all';
+}
+function refreshRepoFilterOptions() {
+  const priorRepo = repoSelect.value || 'all';
+  const selectedClient = clientSelect.value || 'all';
+  const reposForClient = selectedClient === 'all' ? repoList : repoList.filter(r => getRepoClient(r) === selectedClient);
+  repoSelect.innerHTML = ['<option value="all">All repos</option>']
+    .concat(reposForClient.map(r => `<option value="${r}">${repoDisplayName(r)}</option>`))
+    .join('');
+  repoSelect.value = reposForClient.includes(priorRepo) ? priorRepo : 'all';
+}
+function refreshInvoiceOptions() {
+  const sel = document.getElementById('invoiceClient');
+  const prior = sel.value;
+  const names = Object.keys(CLIENTS);
+  sel.innerHTML = names.length
+    ? names.map(c => `<option value="${c}">${c}</option>`).join('')
+    : '<option value="">No clients yet</option>';
+  if (names.includes(prior)) sel.value = prior;
+  const msel = document.getElementById('invoiceMonth');
+  const priorMonth = msel.value;
+  msel.innerHTML = ['<option value="all">All time</option>'].concat(months.map(m => `<option value="${m}">${monthLabel(m)}</option>`)).join('');
+  const curMonth = currentMonthKey();
+  msel.value = (priorMonth && months.includes(priorMonth)) ? priorMonth : (months.includes(curMonth) ? curMonth : 'all');
+}
+
+function refreshReportOptions() {
+  const sel = document.getElementById('reportClient');
+  const prior = sel.value;
+  const names = Object.keys(CLIENTS);
+  sel.innerHTML = names.length
+    ? names.map(c => `<option value="${c}">${c}</option>`).join('')
+    : '<option value="">No clients yet</option>';
+  if (names.includes(prior)) sel.value = prior;
+  const msel = document.getElementById('reportMonth');
+  const priorMonth = msel.value;
+  msel.innerHTML = ['<option value="all">All time</option>'].concat(months.map(m => `<option value="${m}">${monthLabel(m)}</option>`)).join('');
+  const curMonth = currentMonthKey();
+  msel.value = (priorMonth && months.includes(priorMonth)) ? priorMonth : (months.includes(curMonth) ? curMonth : 'all');
+}
+
+function onFilterChange() { render(monthSelect.value, repoSelect.value, clientSelect.value); }
+monthSelect.addEventListener('change', onFilterChange);
+repoSelect.addEventListener('change', onFilterChange);
+clientSelect.addEventListener('change', () => { refreshRepoFilterOptions(); onFilterChange(); });
+
+// ---- Render ----
+function render(monthFilter, repoFilter, clientFilter) {
+  const filtered = RECORDS.filter(r =>
+    (monthFilter === 'all' || r.month === monthFilter) &&
+    (repoFilter === 'all' || r.repo === repoFilter) &&
+    (clientFilter === 'all' || getRepoClient(r.repo) === clientFilter)
+  );
+  // Client-level time has no repo, so it only applies when no specific repo
+  // is selected -- otherwise it'd show up under a repo filter it has
+  // nothing to do with.
+  const filteredClientTime = repoFilter !== 'all' ? [] : CLIENT_LEVEL_TIME.filter(t =>
+    (monthFilter === 'all' || t.month === monthFilter) &&
+    (clientFilter === 'all' || t.clientName === clientFilter)
+  );
+
+  const monthPart = monthFilter === 'all'
+    ? (months.length ? `${months[0]} \u2192 ${months[months.length-1]}` : 'No activity yet')
+    : monthLabel(monthFilter);
+  const repoPart = repoFilter === 'all'
+    ? `${new Set(filtered.map(r=>r.repo)).size} project directories active`
+    : repoDisplayName(repoFilter);
+  const clientPart = clientFilter === 'all' ? '' : ` \u00b7 ${clientFilter}`;
+  document.getElementById('subtitle').textContent = `${monthPart} \u00b7 ${repoPart}${clientPart}`;
+
+  renderTiles(filtered, monthFilter, filteredClientTime);
+  renderClientBars(filtered, filteredClientTime);
+  renderClientLevelTimeTable(filteredClientTime);
+  renderRepoBars(filtered);
+  renderTimeline(filtered);
+  renderDailyTime(filtered);
+  renderModelMix(filtered);
+  renderTable(filtered, monthFilter);
+  renderInsights(monthFilter, repoFilter, clientFilter).catch(e => console.error('insights load failed', e));
+  renderThingsToTry(monthFilter, repoFilter, clientFilter, filtered).catch(e => console.error('things-to-try load failed', e));
+}
+
+function clientTimeCost(t) { return t.hours * getClientRates(t.clientName).activeRate; }
+
+function renderClientLevelTimeTable(filteredClientTime) {
+  const wrap = document.getElementById('clientLevelTimeWrap');
+  if (filteredClientTime.length === 0) { wrap.style.display = 'none'; return; }
+  wrap.style.display = 'block';
+  const rows = [...filteredClientTime].sort((a, b) => a.day.localeCompare(b.day));
+  document.querySelector('#clientLevelTimeTable tbody').innerHTML = rows.map(t => `<tr>
+    <td>${t.day}</td><td>${t.clientName}</td><td class="num">${t.hours.toFixed(2)}h</td><td>${t.note || ''}</td>
+  </tr>`).join('');
+}
+
+function renderClientBars(filtered, filteredClientTime) {
+  const byClient = {};
+  for (const r of filtered) {
+    const client = getRepoClient(r.repo);
+    byClient[client] = (byClient[client] || 0) + recordMyTime(r);
+  }
+  for (const t of filteredClientTime) {
+    byClient[t.clientName] = (byClient[t.clientName] || 0) + clientTimeCost(t);
+  }
+  const rows = Object.entries(byClient).map(([client, myTime]) => ({client, myTime})).sort((a,b) => b.myTime - a.myTime);
+  const el = document.getElementById('clientBars');
+  if (rows.length === 0) { el.innerHTML = '<p class="empty-note">No activity in this period.</p>'; return; }
+  const maxVal = Math.max(...rows.map(r=>r.myTime), 1);
+  el.innerHTML = rows.map(r => {
+    const pct = (r.myTime / maxVal * 100).toFixed(1);
+    return `<div class="bar-row">
+      <div class="bar-label" title="${r.client}">${r.client}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div>
+      <div class="bar-value">${fmtUsd(r.myTime)}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderTiles(filtered, monthFilter, filteredClientTime) {
+  const totalCost = filtered.reduce((a,r)=>a+r.cost,0);
+  const totalMyTime = filtered.reduce((a,r)=>a+recordMyTime(r),0) + filteredClientTime.reduce((a,t)=>a+clientTimeCost(t),0);
+  const totalMsgs = filtered.reduce((a,r)=>a+r.messages,0);
+  const repos = new Set(filtered.map(r=>r.repo));
+  const days = new Set(filtered.map(r=>r.day));
+  let totalSessions;
+  if (monthFilter === 'all') {
+    totalSessions = Object.values(REPO_ALLTIME_SESSIONS).reduce((a,v)=>a+v,0);
+  } else {
+    totalSessions = [...repos].reduce((a,repo)=>a + (REPO_MONTH_SESSIONS[repo]?.[monthFilter]||0), 0);
+  }
+  const tiles = [
+    ['Sessions', fmtInt(totalSessions)],
+    ['Messages', fmtInt(totalMsgs)],
+    ['Active days', days.size],
+    ['Active repos', repos.size],
+    ['Token cost', fmtUsd(totalCost)],
+    ['My time (by client rate)', fmtUsd(totalMyTime)],
+  ];
+  document.getElementById('tiles').innerHTML = tiles.map(([label,value]) =>
+    `<div class="tile"><div class="label">${label}</div><div class="value">${value}</div></div>`
+  ).join('');
+}
+
+function renderRepoBars(filtered) {
+  const byRepo = {};
+  for (const r of filtered) {
+    if (!byRepo[r.repo]) byRepo[r.repo] = { cost: 0, myTime: 0 };
+    byRepo[r.repo].cost += r.cost;
+    byRepo[r.repo].myTime += recordMyTime(r);
+  }
+  const rows = Object.entries(byRepo)
+    .map(([repo,d])=>({repo, cost: d.cost, myTime: d.myTime, total: d.cost + d.myTime}))
+    .sort((a,b)=>b.total-a.total);
+  const el = document.getElementById('repoBars');
+  const tooltip = document.getElementById('repoBarsTooltip');
+  if (rows.length === 0) { el.innerHTML = '<p class="empty-note">No activity in this period.</p>'; tooltip.style.opacity = 0; return; }
+
+  const padL = 60, padR = 10, padT = 10, padB = 100;
+  const colGap = 10;
+  const colW = Math.max((840 / rows.length) - colGap, 14);
+  const W = padL + rows.length * (colW + colGap) + padR;
+  const H = 340;
+  const maxTotal = Math.max(...rows.map(r=>r.total), 1);
+  const plotH = H - padT - padB;
+  const yToPx = v => padT + (1 - v / maxTotal) * plotH;
+
+  const gridY = [0, 0.25, 0.5, 0.75, 1].map(f => {
+    const val = maxTotal * f;
+    const y = yToPx(val).toFixed(1);
+    return `<line class="gridline" x1="${padL}" x2="${W - padR}" y1="${y}" y2="${y}" />
+            <text class="axis-label" x="${padL - 6}" y="${(+y + 3).toFixed(1)}" text-anchor="end">${fmtUsd(val)}</text>`;
+  }).join('');
+
+  const cols = rows.map((r, i) => {
+    const x = padL + i * (colW + colGap);
+    const tokenH = (r.cost / maxTotal) * plotH;
+    const myH = (r.myTime / maxTotal) * plotH;
+    const tokenY = padT + plotH - tokenH;
+    const myY = tokenY - myH;
+    const labelX = (x + colW / 2).toFixed(1);
+    const labelY = padT + plotH + 14;
+    return `<g class="hover-target" data-i="${i}">
+      <rect x="${x.toFixed(1)}" y="${tokenY.toFixed(1)}" width="${colW.toFixed(1)}" height="${Math.max(tokenH,0).toFixed(1)}" fill="var(--series-1)" />
+      <rect x="${x.toFixed(1)}" y="${myY.toFixed(1)}" width="${colW.toFixed(1)}" height="${Math.max(myH,0).toFixed(1)}" fill="var(--series-2)" />
+      <rect x="${x.toFixed(1)}" y="${padT}" width="${colW.toFixed(1)}" height="${plotH.toFixed(1)}" fill="transparent" />
+      <text class="axis-label" x="${labelX}" y="${labelY}" text-anchor="end" transform="rotate(-45 ${labelX} ${labelY})">${repoDisplayName(r.repo)}</text>
+    </g>`;
+  }).join('');
+
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}">${gridY}${cols}</svg>`;
+
+  el.querySelectorAll('.hover-target').forEach(g => {
+    g.addEventListener('mouseenter', () => {
+      const r = rows[+g.dataset.i];
+      tooltip.innerHTML = `<strong>${r.repo}</strong><br>Token cost: ${fmtUsd2(r.cost)}<br>My cost: ${fmtUsd2(r.myTime)}<br>Total: ${fmtUsd2(r.total)}`;
+      tooltip.style.opacity = 1;
+      const wrapRect = el.getBoundingClientRect();
+      const gRect = g.getBoundingClientRect();
+      tooltip.style.left = (gRect.left - wrapRect.left + gRect.width / 2) + 'px';
+      tooltip.style.top = (gRect.top - wrapRect.top - 10) + 'px';
+    });
+    g.addEventListener('mouseleave', () => { tooltip.style.opacity = 0; });
+  });
+}
+
+function renderTimeline(filtered) {
+  const el = document.getElementById('timelineChart');
+  const tooltip = document.getElementById('timelineTooltip');
+  const byDay = {};
+  for (const r of filtered) {
+    if (!byDay[r.day]) byDay[r.day] = { cost: 0, messages: 0 };
+    byDay[r.day].cost += r.cost;
+    byDay[r.day].messages += r.messages;
+  }
+  const days = Object.keys(byDay).sort().map(day => ({ day, ...byDay[day] }));
+  if (days.length === 0) { el.innerHTML = '<p class="empty-note">No activity in this period.</p>'; tooltip.style.opacity = 0; return; }
+
+  const W = 900, H = 220, padL = 50, padR = 10, padT = 10, padB = 24;
+  const maxC = Math.max(...days.map(d=>d.cost), 1);
+  const x = i => days.length > 1 ? padL + (i/(days.length-1)) * (W - padL - padR) : padL;
+  const y = v => padT + (1 - v/maxC) * (H - padT - padB);
+
+  let path = '';
+  days.forEach((d,i) => { path += (i===0 ? 'M' : 'L') + x(i).toFixed(1) + ',' + y(d.cost).toFixed(1) + ' '; });
+  const area = path + `L${x(days.length-1).toFixed(1)},${y(0).toFixed(1)} L${x(0).toFixed(1)},${y(0).toFixed(1)} Z`;
+
+  const gridY = [0, 0.25, 0.5, 0.75, 1].map(f => {
+    const val = maxC * f;
+    return `<line class="gridline" x1="${padL}" x2="${W-padR}" y1="${y(val).toFixed(1)}" y2="${y(val).toFixed(1)}" />
+            <text class="axis-label" x="${padL-6}" y="${(y(val)+3).toFixed(1)}" text-anchor="end">${fmtUsd(val)}</text>`;
+  }).join('');
+
+  const step = Math.max(1, Math.ceil(days.length / 10));
+  const gridX = days.map((d,i) => i % step === 0 ? `<text class="axis-label" x="${x(i).toFixed(1)}" y="${H-6}" text-anchor="middle">${d.day.slice(5)}</text>` : '').join('');
+  const dots = days.map((d,i) => `<circle class="dot hover-target" data-i="${i}" cx="${x(i).toFixed(1)}" cy="${y(d.cost).toFixed(1)}" r="3.5" />`).join('');
+
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}">${gridY}<path class="area-path" d="${area}" /><path class="line-path" d="${path}" />${dots}${gridX}</svg>`;
+
+  el.querySelectorAll('.hover-target').forEach(dot => {
+    dot.addEventListener('mouseenter', () => {
+      const d = days[+dot.dataset.i];
+      tooltip.innerHTML = `<strong>${d.day}</strong><br>${fmtUsd2(d.cost)} \u00b7 ${fmtInt(d.messages)} msgs`;
+      tooltip.style.opacity = 1;
+      const rect = el.getBoundingClientRect();
+      tooltip.style.left = ((dot.cx.baseVal.value / W) * rect.width) + 'px';
+      tooltip.style.top = ((dot.cy.baseVal.value / H) * rect.height - 40) + 'px';
+    });
+    dot.addEventListener('mouseleave', () => { tooltip.style.opacity = 0; });
+  });
+}
+
+function renderDailyTime(filtered) {
+  const el = document.getElementById('dailyTimeChart');
+  const tooltip = document.getElementById('dailyTimeTooltip');
+  const summaryEl = document.getElementById('dailyTimeSummary');
+  const parseHM = s => { const [h,m] = s.split(':').map(Number); return h + m/60; };
+
+  const byDay = {};
+  for (const r of filtered) {
+    if (!byDay[r.day]) byDay[r.day] = { startH: 24, endH: 0, activeHours: 0, messages: 0 };
+    const d = byDay[r.day];
+    d.startH = Math.min(d.startH, parseHM(r.start));
+    d.endH = Math.max(d.endH, parseHM(r.end));
+    d.activeHours += r.activeHours;
+    d.messages += r.messages;
+  }
+  const rows = Object.keys(byDay).sort().map(day => {
+    const d = byDay[day];
+    return { day, startH: d.startH, endH: d.endH, spanHours: Math.max(d.endH - d.startH, 0.02), activeHours: d.activeHours, messages: d.messages };
+  });
+
+  if (rows.length === 0) { el.innerHTML = '<p class="empty-note">No activity in this period.</p>'; summaryEl.textContent = ''; tooltip.style.opacity = 0; return; }
+
+  const rowH = 16, gapY = 4, padL = 70, padR = 145, padT = 6, padB = 20;
+  const W = 900;
+  const H = padT + padB + rows.length * (rowH + gapY);
+  const hToX = h => padL + (h / 24) * (W - padL - padR);
+
+  const gridX = [0,4,8,12,16,20,24].map(h =>
+    `<line class="gridline" x1="${hToX(h).toFixed(1)}" x2="${hToX(h).toFixed(1)}" y1="${padT}" y2="${H-padB}" />
+     <text class="axis-label" x="${hToX(h).toFixed(1)}" y="${H-6}" text-anchor="middle">${String(h).padStart(2,'0')}:00</text>`
+  ).join('');
+
+  const bars = rows.map((r, i) => {
+    const y = padT + i * (rowH + gapY);
+    const spanX1 = hToX(r.startH), spanX2 = hToX(r.endH);
+    const spanW = Math.max(spanX2 - spanX1, 2);
+    const activeFrac = r.spanHours > 0 ? Math.min(r.activeHours / r.spanHours, 1) : 0;
+    const activeW = Math.max(spanW * activeFrac, 0);
+    return `<g class="hover-target" data-i="${i}" style="cursor:pointer">
+      <text class="axis-label" x="${padL - 8}" y="${(y + rowH/2 + 3).toFixed(1)}" text-anchor="end">${r.day.slice(5)}</text>
+      <rect x="${spanX1.toFixed(1)}" y="${y}" width="${spanW.toFixed(1)}" height="${rowH}" rx="3" fill="var(--seq-100)" />
+      <rect x="${spanX1.toFixed(1)}" y="${y}" width="${activeW.toFixed(1)}" height="${rowH}" rx="3" fill="var(--series-1)" />
+      <text class="axis-label" x="${W - padR + 8}" y="${(y + rowH/2 + 3).toFixed(1)}" text-anchor="start">${r.activeHours.toFixed(1)}h active / ${r.spanHours.toFixed(1)}h span</text>
+    </g>`;
+  }).join('');
+
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}">${gridX}${bars}</svg>`;
+
+  el.querySelectorAll('.hover-target').forEach(g => {
+    g.addEventListener('mouseenter', () => {
+      const r = rows[+g.dataset.i];
+      const startStr = String(Math.floor(r.startH)).padStart(2,'0') + ':' + String(Math.round((r.startH%1)*60)).padStart(2,'0');
+      const endStr = String(Math.floor(r.endH)).padStart(2,'0') + ':' + String(Math.round((r.endH%1)*60)).padStart(2,'0');
+      tooltip.innerHTML = `<strong>${r.day}</strong><br>${startStr}\u2013${endStr} Brisbane (span ${r.spanHours.toFixed(1)}h)<br>Active: ${r.activeHours.toFixed(1)}h \u00b7 ${fmtInt(r.messages)} msgs<br><span style="opacity:0.7">Click to open in Time tab</span>`;
+      tooltip.style.opacity = 1;
+      const rect = el.getBoundingClientRect();
+      const bbox = g.getBoundingClientRect();
+      tooltip.style.left = (bbox.left - rect.left + 40) + 'px';
+      tooltip.style.top = (bbox.top - rect.top - 8) + 'px';
+    });
+    g.addEventListener('mouseleave', () => { tooltip.style.opacity = 0; });
+    g.addEventListener('click', () => goToTimeTabForDate(rows[+g.dataset.i].day));
+  });
+
+  const totalActive = rows.reduce((a,r)=>a+r.activeHours,0);
+  const totalSpan = rows.reduce((a,r)=>a+r.spanHours,0);
+  const avgActive = totalActive / rows.length;
+  summaryEl.innerHTML = `<strong>${rows.length}</strong> active days \u00b7 <strong>${totalActive.toFixed(0)}h</strong> total active chatting time (avg ${avgActive.toFixed(1)}h/day) \u00b7 <strong>${totalSpan.toFixed(0)}h</strong> total first-to-last span`;
+}
+
+function renderModelMix(filtered) {
+  const colors = { 'claude-fable-5': 'var(--series-1)', 'claude-opus-4-8': 'var(--series-2)', 'claude-opus-5': 'var(--series-3)', 'claude-sonnet-5': 'var(--series-4)' };
+  const labels = { 'claude-fable-5': 'Claude Fable 5', 'claude-opus-4-8': 'Claude Opus 4.8', 'claude-opus-5': 'Claude Opus 5', 'claude-sonnet-5': 'Claude Sonnet 5' };
+  const totals = {};
+  for (const r of filtered) {
+    for (const [m,c] of Object.entries(r.models)) {
+      if (m === '<synthetic>') continue;
+      totals[m] = (totals[m]||0) + c;
+    }
+  }
+  let entries = Object.entries(totals).sort((a,b)=>b[1]-a[1]);
+  const total = entries.reduce((a,[,v])=>a+v,0);
+  const barEl = document.getElementById('modelBar');
+  const legendEl = document.getElementById('modelLegend');
+  if (total === 0) { barEl.innerHTML = '<p class="empty-note">No activity in this period.</p>'; legendEl.innerHTML = ''; return; }
+
+  barEl.innerHTML = `<div class="model-bar">` +
+    entries.map(([k,v]) => `<div class="model-seg" style="width:${(v/total*100).toFixed(2)}%;background:${colors[k]||'var(--series-5)'}"></div>`).join('') +
+    `</div>`;
+  legendEl.innerHTML = entries.map(([k,v]) =>
+    `<div class="legend-item"><span class="swatch" style="background:${colors[k]||'var(--series-5)'}"></span>${labels[k]||k} \u2014 ${fmtInt(v)} msgs (${(v/total*100).toFixed(1)}%)</div>`
+  ).join('');
+}
+
+function renderTable(filtered, monthFilter) {
+  const byRepo = {};
+  for (const r of filtered) {
+    if (!byRepo[r.repo]) byRepo[r.repo] = { cost: 0, messages: 0, activeHours: 0, myTime: 0, days: new Set(), adjusted: false };
+    byRepo[r.repo].cost += r.cost;
+    byRepo[r.repo].messages += r.messages;
+    byRepo[r.repo].activeHours += r.activeHours;
+    byRepo[r.repo].myTime += recordMyTime(r);
+    byRepo[r.repo].days.add(r.day);
+    byRepo[r.repo].adjusted = byRepo[r.repo].adjusted || !!r.adjusted;
+  }
+  const rows = Object.entries(byRepo).map(([repo, d]) => {
+    const days = [...d.days].sort();
+    const sessions = monthFilter === 'all' ? REPO_ALLTIME_SESSIONS[repo] : (REPO_MONTH_SESSIONS[repo]?.[monthFilter] || 0);
+    return {
+      repo, client: getRepoClient(repo), sessions, messages: d.messages, activeHours: d.activeHours, cost: d.cost,
+      myTime: d.myTime, adjusted: d.adjusted,
+      firstDay: days[0], lastDay: days[days.length-1],
+    };
+  }).sort((a,b) => b.cost - a.cost);
+
+  lastTableRows = rows;
+  const tbody = document.querySelector('#repoTable tbody');
+  if (rows.length === 0) { tbody.innerHTML = '<tr><td colspan="9" class="empty-note">No activity in this period.</td></tr>'; return; }
+  tbody.innerHTML = rows.map(r => `<tr>
+    <td>${r.repo}</td>
+    <td>${r.client}</td>
+    <td class="num">${r.sessions}</td>
+    <td class="num">${fmtInt(r.messages)}</td>
+    <td class="num">${r.activeHours.toFixed(1)}h${r.adjusted ? ' <span title="Includes a Time-tab adjustment or manual entry">•</span>' : ''}</td>
+    <td>${r.firstDay}</td>
+    <td>${r.lastDay}</td>
+    <td class="num">${fmtUsd2(r.cost)}</td>
+    <td class="num">${fmtUsd2(r.myTime)}</td>
+  </tr>`).join('');
+}
+
+// ---- CSV export ----
+let lastTableRows = null;
+let lastInvoiceData = null;
+
+function downloadCSV(filename, headers, rows) {
+  const esc = v => {
+    const s = String(v ?? '');
+    return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+  };
+  const lines = [headers.map(esc).join(',')].concat(rows.map(r => r.map(esc).join(',')));
+  const blob = new Blob(['﻿' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+}
+
+document.getElementById('downloadTableCsvBtn').addEventListener('click', () => {
+  if (!lastTableRows || lastTableRows.length === 0) { alert('No data to export for the current filter.'); return; }
+  downloadCSV(
+    'claude-usage-breakdown.csv',
+    ['Repo', 'Client', 'Sessions', 'Messages', 'Hours chatting', 'First', 'Last', 'Token cost', 'My time'],
+    lastTableRows.map(r => [r.repo, r.client, r.sessions, r.messages, r.activeHours.toFixed(2), r.firstDay, r.lastDay, r.cost.toFixed(2), r.myTime.toFixed(2)])
+  );
+});
+
+// ---- Insights tab ----
+async function renderInsights(monthFilter, repoFilter, clientFilter) {
+  const params = new URLSearchParams({ month: monthFilter, repo: repoFilter, client: clientFilter });
+  const data = await fetch('/api/insights?' + params.toString()).then(r => r.json());
+
+  const anomalyEl = document.getElementById('anomalyBanner');
+  if (data.costAnomaly) {
+    const a = data.costAnomaly;
+    const dir = a.pctAboveBaseline >= 0 ? 'above' : 'below';
+    const cls = a.isAnomalous ? 'callout callout-warn' : 'callout';
+    anomalyEl.innerHTML = `<div class="${cls}">${a.day}: ${fmtUsd2(a.cost)}, ${Math.abs(a.pctAboveBaseline)}% ${dir} the typical ${new Date(a.day + 'T00:00:00Z').toLocaleDateString(undefined,{weekday:'long', timeZone:'UTC'})} (baseline ${fmtUsd2(a.baselineMean)}, z=${a.z})${a.isAnomalous ? ' — flagged as anomalous' : ''}</div>`;
+  } else {
+    anomalyEl.innerHTML = '<p class="empty-note">Not enough history yet for a baseline (need 8+ days).</p>';
+  }
+  if (data.forecast) {
+    const f = data.forecast;
+    document.getElementById('forecastTiles').innerHTML = [
+      [`${monthLabel(f.month)} so far`, fmtUsd(f.mtdCost)],
+      ['Days elapsed', `${f.daysElapsed} / ${f.daysInMonth}`],
+      ['Projected month total', fmtUsd(f.projectedTotal)],
+    ].map(([l,v]) => `<div class="tile"><div class="label">${l}</div><div class="value">${v}</div></div>`).join('');
+  } else {
+    document.getElementById('forecastTiles').innerHTML = '';
+  }
+
+  const ce = data.cacheEfficiency;
+  document.getElementById('cacheTiles').innerHTML = [
+    ['Cache hit rate', (ce.cacheHitRate * 100).toFixed(1) + '%'],
+    ['Tokens served from cache', fmtInt(ce.cacheReadTokens)],
+    ['Est. cache savings', fmtUsd(ce.estSavings)],
+  ].map(([l,v]) => `<div class="tile"><div class="label">${l}</div><div class="value">${v}</div></div>`).join('');
+
+  const ccb = data.cacheCostBreakdown;
+  const ccbTotal = ccb.input + ccb.output + ccb.cacheWrite + ccb.cacheRead;
+  const cacheCostEl = document.getElementById('cacheCostBars');
+  if (ccbTotal <= 0) {
+    cacheCostEl.innerHTML = '<p class="empty-note">No token activity in this period.</p>';
+  } else {
+    const ccbRows = [['Input', ccb.input], ['Output', ccb.output], ['Cache write', ccb.cacheWrite], ['Cache read', ccb.cacheRead]];
+    cacheCostEl.innerHTML = ccbRows.map(([label, val]) => {
+      const pct = (val / ccbTotal * 100).toFixed(1);
+      return `<div class="bar-row"><div class="bar-label">${label}</div><div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div><div class="bar-value">${fmtUsd2(val)}</div></div>`;
+    }).join('');
+  }
+
+  const cpc = data.costPerCommit;
+  document.getElementById('commitTiles').innerHTML = [
+    ['Detected commits', fmtInt(cpc.totalCommits)],
+    ['Cost per commit', cpc.value != null ? fmtUsd2(cpc.value) : '—'],
+  ].map(([l,v]) => `<div class="tile"><div class="label">${l}</div><div class="value">${v}</div></div>`).join('');
+
+  renderRecentCommits(repoFilter, monthFilter);
+
+  const fr = data.focusRatio;
+  document.getElementById('focusTiles').innerHTML = [
+    ['Focus ratio', (fr.pct * 100).toFixed(0) + '%'],
+    ['Active hours', fr.activeHours.toFixed(0) + 'h'],
+    ['Span hours', fr.spanHours.toFixed(0) + 'h'],
+  ].map(([l,v]) => `<div class="tile"><div class="label">${l}</div><div class="value">${v}</div></div>`).join('');
+
+  const meEl = document.getElementById('manualEquivalentNote');
+  if (data.manualEquivalent) {
+    const me = data.manualEquivalent;
+    meEl.innerHTML = `<strong>Assumption, not a measurement:</strong> at a ${me.multiplier}× manual-work multiplier (set on the Settings tab), ${me.activeHours}h of active chatting stands in for an estimated ${me.manualEquivalentHours}h of manual-equivalent work (+${me.extraHours}h). This is an adjustable input you control, not something we measured — see RESEARCH.md for why we don't claim a hard "time saved" number.`;
+  } else {
+    meEl.innerHTML = '<span class="empty-note">Select a single client (not "All clients") to see an adjustable manual-equivalent estimate.</span>';
+  }
+
+  const ct = data.cycleTime;
+  const ctTotal = ct.toolExecHours + ct.modelLatencyHours;
+  const cycleEl = document.getElementById('cycleTimeBars');
+  if (ctTotal <= 0) {
+    cycleEl.innerHTML = '<p class="empty-note">No active time in this period.</p>';
+  } else {
+    cycleEl.innerHTML = [['Waiting on tool result', ct.toolExecHours], ['Waiting on model', ct.modelLatencyHours]].map(([label, val]) => {
+      const pct = (val / ctTotal * 100).toFixed(1);
+      return `<div class="bar-row"><div class="bar-label">${label}</div><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:var(--series-4)"></div></div><div class="bar-value">${val.toFixed(1)}h</div></div>`;
+    }).join('');
+  }
+
+  const ut = data.utilization;
+  document.getElementById('utilizationTiles').innerHTML = [
+    ['Utilization', (ut.pct * 100).toFixed(0) + '%'],
+    ['Billable hours', ut.billableHours.toFixed(1) + 'h'],
+    ['Non-billable hours', ut.nonBillableHours.toFixed(1) + 'h'],
+  ].map(([l,v]) => `<div class="tile"><div class="label">${l}</div><div class="value">${v}</div></div>`).join('');
+
+  const st = data.streaks;
+  document.getElementById('streakTiles').innerHTML = [
+    ['Current streak', st.currentStreak + ' day' + (st.currentStreak === 1 ? '' : 's')],
+    ['Longest streak', st.longestStreak + ' day' + (st.longestStreak === 1 ? '' : 's')],
+    ['Active days total', st.activeDayCount],
+  ].map(([l,v]) => `<div class="tile"><div class="label">${l}</div><div class="value">${v}</div></div>`).join('');
+
+  renderInvestmentChart(repoFilter, clientFilter);
+
+  const taxEl = document.getElementById('toolTaxonomyBars');
+  if (data.toolTaxonomy.length === 0) {
+    taxEl.innerHTML = '<p class="empty-note">No tool activity in this period.</p>';
+  } else {
+    const maxTax = Math.max(...data.toolTaxonomy.map(t => t.count));
+    taxEl.innerHTML = data.toolTaxonomy.map(t => {
+      const pct = (t.count / maxTax * 100).toFixed(1);
+      return `<div class="bar-row"><div class="bar-label">${t.category}</div><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:var(--series-3)"></div></div><div class="bar-value">${fmtInt(t.count)}</div></div>`;
+    }).join('');
+  }
+
+  const toolEl = document.getElementById('toolMixBars');
+  if (data.toolMix.length === 0) {
+    toolEl.innerHTML = '<p class="empty-note">No tool activity in this period.</p>';
+  } else {
+    const maxV = Math.max(...data.toolMix.map(t => t.count));
+    toolEl.innerHTML = data.toolMix.slice(0, 15).map(t => {
+      const pct = (t.count / maxV * 100).toFixed(1);
+      return `<div class="bar-row"><div class="bar-label">${t.tool}</div><div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div><div class="bar-value">${fmtInt(t.count)}</div></div>`;
+    }).join('');
+  }
+
+  const rw = data.rework;
+  document.getElementById('reworkTiles').innerHTML = [
+    ['Rework rate', (rw.rate * 100).toFixed(1) + '%'],
+    ['Files flagged', fmtInt(rw.files.length)],
+    ['Total files touched', fmtInt(rw.totalFilesTouched)],
+  ].map(([l,v]) => `<div class="tile"><div class="label">${l}</div><div class="value">${v}</div></div>`).join('');
+  const reworkBody = document.querySelector('#reworkTable tbody');
+  if (rw.files.length === 0) {
+    reworkBody.innerHTML = '<tr><td colspan="3" class="empty-note">No files revisited across 3+ distinct days in this period.</td></tr>';
+  } else {
+    reworkBody.innerHTML = rw.files.map(f =>
+      `<tr><td title="${f.filePath}">${f.filePath.split(/[\\/]/).slice(-2).join('/')}</td><td>${repoDisplayName(f.repo)}</td><td class="num">${f.distinctDays}</td></tr>`
+    ).join('');
+  }
+
+  const hotBody = document.querySelector('#hotFilesTable tbody');
+  if (data.hotFiles.length === 0) {
+    hotBody.innerHTML = '<tr><td colspan="2" class="empty-note">No file activity in this period.</td></tr>';
+  } else {
+    hotBody.innerHTML = data.hotFiles.map(f =>
+      `<tr><td title="${f.filePath}">${f.filePath.split(/[\\/]/).slice(-2).join('/')}</td><td class="num">${fmtInt(f.touches)}</td></tr>`
+    ).join('');
+  }
+}
+
+// ---- Things to try (nudges toward underused Claude Code capabilities,
+// triggered off this period's actual tool-call mix) ----
+async function renderThingsToTry(monthFilter, repoFilter, clientFilter, filtered) {
+  const params = new URLSearchParams({ month: monthFilter, repo: repoFilter, client: clientFilter });
+  const data = await fetch('/api/insights?' + params.toString()).then(r => r.json());
+
+  const toolMix = data.toolMix || [];
+  const totalCalls = toolMix.reduce((a, t) => a + t.count, 0);
+  const countOf = name => (toolMix.find(t => t.tool === name) || {}).count || 0;
+  const prefixCountOf = prefix => toolMix.filter(t => t.tool.startsWith(prefix)).reduce((a, t) => a + t.count, 0);
+  const pct = (n, d) => d > 0 ? Math.round(n / d * 1000) / 10 : 0;
+  const badge = (used, ok) => used
+    ? (ok ? '<span class="recap-badge">In use</span>' : '<span class="recap-badge">Light use</span>')
+    : '<span class="recap-badge">Not used this period</span>';
+
+  const agentCalls = countOf('Agent');
+  const skillCalls = countOf('Skill');
+  const researchCalls = countOf('WebSearch') + countOf('WebFetch');
+  const mcpCalls = prefixCountOf('mcp__');
+  const workflowCalls = countOf('Workflow');
+  const cronCalls = countOf('CronCreate');
+
+  const perRepo = data.perRepoTools || [];
+  const investigativeHeavyRepos = perRepo
+    .filter(p => p.total >= 20 && (p.byCategory.Investigative || 0) / p.total >= 0.4 && p.agentCalls === 0)
+    .sort((a, b) => (b.byCategory.Investigative || 0) - (a.byCategory.Investigative || 0));
+  const reworkFiles = (data.rework && data.rework.files) || [];
+  const topRework = reworkFiles.slice(0, 3);
+
+  // Specific skill invocations (not just the generic "Skill" tool count) --
+  // lets these two cards say "you've never run X" instead of guessing.
+  const skillMix = data.skillMix || [];
+  const CODE_REVIEW_RE = /code-review|ultrareview/i;
+  const SECURITY_REVIEW_RE = /security-review|security-audit|cyber/i;
+  const skillCallsByPattern = re => skillMix.filter(s => re.test(s.skill)).reduce((a, s) => a + s.count, 0);
+  const hasSkillMatching = (p, re) => Object.keys(p.skillNames || {}).some(name => re.test(name));
+  const codeReviewCalls = skillCallsByPattern(CODE_REVIEW_RE);
+  const securityReviewCalls = skillCallsByPattern(SECURITY_REVIEW_RE);
+  const codeReviewCandidates = perRepo
+    .filter(p => (p.byCategory['Code-changing'] || 0) >= 10 && !hasSkillMatching(p, CODE_REVIEW_RE))
+    .sort((a, b) => (b.byCategory['Code-changing'] || 0) - (a.byCategory['Code-changing'] || 0));
+  const securityReviewCandidates = perRepo
+    .filter(p => (p.byCategory['Code-changing'] || 0) >= 10 && !hasSkillMatching(p, SECURITY_REVIEW_RE))
+    .sort((a, b) => (b.byCategory['Code-changing'] || 0) - (a.byCategory['Code-changing'] || 0));
+
+  const distinctModels = new Set();
+  for (const r of filtered) {
+    for (const m of Object.keys(r.models || {})) { if (m !== '<synthetic>') distinctModels.add(m); }
+  }
+
+  const cardsEl = document.getElementById('thingsToTryCards');
+  if (totalCalls === 0) {
+    cardsEl.innerHTML = '<p class="empty-note">No tool activity in this period — nothing to flag yet.</p>';
+  } else {
+    const cards = [];
+
+    {
+      let detail;
+      if (investigativeHeavyRepos.length > 0) {
+        const repoNames = investigativeHeavyRepos.slice(0, 3).map(p => repoDisplayName(p.repo)).join(', ');
+        detail = `${investigativeHeavyRepos.length} repo${investigativeHeavyRepos.length === 1 ? '' : 's'} this period show heavy single-threaded investigation (grep/read/glob) with zero Agent-tool calls — notably <strong>${repoNames}</strong>. Fanning searches like "find every place X happens" or "check these 5 files" out to a few parallel Explore/general-purpose agents usually beats working through them one at a time.`;
+      } else if (agentCalls > 0) {
+        detail = `${fmtInt(agentCalls)} Agent-tool call${agentCalls === 1 ? '' : 's'} this period (${pct(agentCalls, totalCalls)}% of all tool calls) — subagents are already part of the workflow here.`;
+      } else {
+        detail = `No repo this period had enough investigative volume to flag — nothing to fan out yet.`;
+      }
+      cards.push({
+        title: 'Subagents for parallel exploration',
+        blurb: 'Spin up multiple Explore / general-purpose agents to search, read, or verify concurrently instead of one linear thread.',
+        badgeHtml: badge(agentCalls > 0, investigativeHeavyRepos.length === 0),
+        detail,
+      });
+    }
+
+    {
+      let detail;
+      if (researchCalls === 0 && totalCalls >= 50) {
+        detail = `Zero WebSearch/WebFetch calls this period across ${fmtInt(totalCalls)} tool calls. If any of this work touches current pricing, docs, or anything that goes stale, pointing Claude at the live web — or chaining a few searches into a short research pass — beats working from training-data memory alone.`;
+      } else if (researchCalls > 0) {
+        detail = `${fmtInt(researchCalls)} WebSearch/WebFetch call${researchCalls === 1 ? '' : 's'} this period (${pct(researchCalls, totalCalls)}% of all tool calls).`;
+      } else {
+        detail = `Not enough activity this period to say either way.`;
+      }
+      cards.push({
+        title: 'Web research / deep research',
+        blurb: 'Multi-step WebSearch + WebFetch passes to pull in current information instead of relying on training data alone.',
+        badgeHtml: badge(researchCalls > 0, researchCalls / Math.max(totalCalls, 1) > 0.02),
+        detail,
+      });
+    }
+
+    {
+      let detail;
+      if (mcpCalls === 0 && totalCalls >= 50) {
+        detail = `No MCP tool calls this period. MCP servers let Claude act directly against systems already in use here — Azure DevOps, a database, Fabric, whatever's relevant to a given repo — instead of relaying context back and forth by hand.`;
+      } else if (mcpCalls > 0) {
+        detail = `${fmtInt(mcpCalls)} MCP tool call${mcpCalls === 1 ? '' : 's'} this period (${pct(mcpCalls, totalCalls)}% of all tool calls) — already wired into at least one system.`;
+      } else {
+        detail = `Not enough activity this period to say either way.`;
+      }
+      cards.push({
+        title: 'MCP integrations',
+        blurb: 'Connect Claude directly to the systems behind the work (Azure DevOps, databases, Fabric, ...) instead of relaying data manually.',
+        badgeHtml: badge(mcpCalls > 0, true),
+        detail,
+      });
+    }
+
+    {
+      let detail;
+      if (skillCalls === 0 && topRework.length > 0) {
+        const fileList = topRework.map(f => `${f.filePath.split(/[\\/]/).slice(-1)[0]} (${repoDisplayName(f.repo)}, ${f.distinctDays} days)`).join('; ');
+        detail = `No Skill invocations this period, but ${fileList} were revisited across several separate days — that's the kind of recurring pattern worth packaging into a Skill or a CLAUDE.md snippet so a future session doesn't rediscover the same conventions from scratch.`;
+      } else if (skillCalls > 0) {
+        detail = `${fmtInt(skillCalls)} Skill invocation${skillCalls === 1 ? '' : 's'} this period — already in use.`;
+      } else {
+        detail = `No strong signal either way this period.`;
+      }
+      cards.push({
+        title: 'Skills for recurring patterns',
+        blurb: 'Package a repeated multi-step procedure (a deploy checklist, a report format, a review pass) into a reusable Skill or slash command.',
+        badgeHtml: badge(skillCalls > 0, true),
+        detail,
+      });
+    }
+
+    {
+      let detail;
+      if (workflowCalls === 0 && totalCalls >= 300) {
+        detail = `Zero Workflow-tool calls this period across ${fmtInt(totalCalls)} tool calls — subagents get used ad hoc (${fmtInt(agentCalls)} Agent-tool calls) but never scripted into a repeatable pipeline. For anything that's really the same multi-step sequence every time (review → fix → verify, migrate → verify), the Workflow tool scripts the fan-out/verify/synthesize steps once instead of re-prompting each stage by hand.`;
+      } else if (workflowCalls > 0) {
+        detail = `${fmtInt(workflowCalls)} Workflow-tool call${workflowCalls === 1 ? '' : 's'} this period — already scripting at least one pipeline instead of re-prompting each stage by hand.`;
+      } else {
+        detail = `Not enough activity this period to say either way.`;
+      }
+      cards.push({
+        title: 'Scripted multi-agent workflows',
+        blurb: 'For a pipeline that runs the same way every time, script the fan-out/verify/synthesize steps once (the Workflow tool) instead of re-prompting each stage by hand.',
+        badgeHtml: badge(workflowCalls > 0, true),
+        detail,
+      });
+    }
+
+    {
+      let detail;
+      if (cronCalls === 0 && totalCalls >= 300) {
+        detail = `Zero CronCreate calls this period. If any of this work is really "run the same check on a cadence" (a daily recap, a deploy-health poll, a recurring report), scheduling it once removes the need to remember to re-run it by hand.`;
+      } else if (cronCalls > 0) {
+        detail = `${fmtInt(cronCalls)} CronCreate call${cronCalls === 1 ? '' : 's'} this period — already scheduling some recurring work.`;
+      } else {
+        detail = `Not enough activity this period to say either way.`;
+      }
+      cards.push({
+        title: 'Scheduled / autonomous agents',
+        blurb: 'Turn a task re-run on a cadence (a daily recap, a health check, a recurring report) into a scheduled cron agent instead of manually re-invoking it each time.',
+        badgeHtml: badge(cronCalls > 0, true),
+        detail,
+      });
+    }
+
+    {
+      let detail;
+      if (distinctModels.size <= 1 && totalCalls >= 100) {
+        const only = [...distinctModels][0] || 'one model';
+        detail = `Everything this period ran on ${only} alone. For genuinely hard reasoning, a risky/irreversible change, or a design decision worth a second opinion, escalating to a stronger reviewer model before committing catches issues a single pass can miss.`;
+      } else if (distinctModels.size > 1) {
+        detail = `${distinctModels.size} different models were used this period — some escalation already happening.`;
+      } else {
+        detail = `Not enough activity this period to say either way.`;
+      }
+      cards.push({
+        title: 'Escalate to a stronger model for hard calls',
+        blurb: 'Get a second opinion from a stronger reviewer model before a risky change, a schema/design decision, or when stuck.',
+        badgeHtml: badge(distinctModels.size > 1, true),
+        detail,
+      });
+    }
+
+    {
+      let detail;
+      if (codeReviewCalls === 0 && codeReviewCandidates.length > 0) {
+        const repoNames = codeReviewCandidates.slice(0, 3).map(p => repoDisplayName(p.repo)).join(', ');
+        detail = `No code-review skill invocations this period. <strong>${repoNames}</strong> saw real code-changing activity (Edit/Write calls) with nothing checking it before it shipped — a <code>/code-review</code> pass (or <code>/code-review ultra</code> for the full multi-agent cloud version) catches issues a single editing pass misses.`;
+      } else if (codeReviewCalls > 0) {
+        detail = `${fmtInt(codeReviewCalls)} code-review invocation${codeReviewCalls === 1 ? '' : 's'} this period — already part of the workflow.`;
+      } else {
+        detail = `No repo this period had enough code-changing volume to flag.`;
+      }
+      cards.push({
+        title: 'Code review before shipping',
+        blurb: 'Run /code-review (or /code-review ultra for a multi-agent cloud review) against the current branch before it merges.',
+        badgeHtml: badge(codeReviewCalls > 0, codeReviewCandidates.length === 0),
+        detail,
+      });
+    }
+
+    {
+      let detail;
+      if (securityReviewCalls === 0 && securityReviewCandidates.length > 0) {
+        const repoNames = securityReviewCandidates.slice(0, 3).map(p => repoDisplayName(p.repo)).join(', ');
+        detail = `No security-review skill invocations this period. <strong>${repoNames}</strong> had real code-changing activity with no security pass run against it — worth a look, especially anything touching auth, secrets, payments, or user data.`;
+      } else if (securityReviewCalls > 0) {
+        detail = `${fmtInt(securityReviewCalls)} security-review invocation${securityReviewCalls === 1 ? '' : 's'} this period — already part of the workflow.`;
+      } else {
+        detail = `No repo this period had enough code-changing volume to flag.`;
+      }
+      cards.push({
+        title: 'Security / cyber assessment',
+        blurb: 'Run a security-review pass over pending changes — injection, auth, secrets handling — before it ships.',
+        badgeHtml: badge(securityReviewCalls > 0, securityReviewCandidates.length === 0),
+        detail,
+      });
+    }
+
+    cardsEl.innerHTML = cards.map(c => `
+      <div class="recap-card">
+        <div class="recap-card-header">
+          <h3>${c.title}</h3>
+          ${c.badgeHtml}
+        </div>
+        <p class="section-note" style="margin:0 0 8px">${c.blurb}</p>
+        <p style="margin:0">${c.detail}</p>
+      </div>
+    `).join('');
+  }
+
+  const repoBody = document.querySelector('#thingsToTryRepoTable tbody');
+  if (perRepo.length === 0) {
+    repoBody.innerHTML = '<tr><td colspan="6" class="empty-note">No tool activity in this period.</td></tr>';
+  } else {
+    repoBody.innerHTML = perRepo.map(p => {
+      const invPct = pct(p.byCategory.Investigative || 0, p.total);
+      const orchPctR = pct(p.byCategory.Orchestration || 0, p.total);
+      const researchPctR = pct(p.researchCalls, p.total);
+      const codeChanging = p.byCategory['Code-changing'] || 0;
+      const signals = [];
+      if (p.total >= 20 && invPct >= 40 && p.agentCalls === 0) signals.push('Subagent candidate');
+      if (p.total >= 20 && p.researchCalls === 0 && invPct >= 30) signals.push('Research candidate');
+      if (codeChanging >= 10 && !hasSkillMatching(p, CODE_REVIEW_RE)) signals.push('Code review candidate');
+      if (codeChanging >= 10 && !hasSkillMatching(p, SECURITY_REVIEW_RE)) signals.push('Cyber assessment candidate');
+      const signal = signals.length ? signals.join(', ') : '—';
+      return `<tr><td title="${p.repo}">${repoDisplayName(p.repo)}</td><td class="num">${fmtInt(p.total)}</td><td class="num">${invPct}%</td><td class="num">${orchPctR}%</td><td class="num">${researchPctR}%</td><td>${signal}</td></tr>`;
+    }).join('');
+  }
+}
+
+// ---- Recent commits (verified via git log, single-repo only) ----
+let recentCommitsToken = 0;
+async function renderRecentCommits(repoFilter, monthFilter) {
+  const el = document.getElementById('recentCommits');
+  if (repoFilter === 'all') {
+    el.innerHTML = '<p class="empty-note">Select a single repo above to see verified commit history.</p>';
+    return;
+  }
+  const myToken = ++recentCommitsToken;
+  el.innerHTML = '<p class="empty-note">Loading…</p>';
+  const params = new URLSearchParams({ repo: repoFilter, month: monthFilter });
+  let data;
+  try {
+    data = await fetch('/api/repo-commits?' + params.toString()).then(r => r.json());
+  } catch (e) {
+    if (myToken === recentCommitsToken) el.innerHTML = `<p class="empty-note">Could not load commit history: ${e.message}</p>`;
+    return;
+  }
+  if (myToken !== recentCommitsToken) return; // a newer filter change superseded this request
+  if (!data.available) {
+    el.innerHTML = `<p class="empty-note">${data.reason}</p>`;
+    return;
+  }
+  if (data.commits.length === 0) {
+    el.innerHTML = `<p class="empty-note">No commits in this period (${data.cwdPath}).</p>`;
+    return;
+  }
+  el.innerHTML = `<p class="section-note">${data.cwdPath} — most recent ${data.commits.length}${data.commits.length === 50 ? '+' : ''}</p>` +
+    `<table><thead><tr><th>Date</th><th>Message</th><th>Hash</th></tr></thead><tbody>` +
+    data.commits.map(c => `<tr><td>${c.date.slice(0, 16).replace('T', ' ')}</td><td title="${c.author}">${c.message}</td><td><code>${c.hash}</code></td></tr>`).join('') +
+    `</tbody></table>`;
+}
+
+// ---- Investment-by-client-over-time chart (frontend-only, from RECORDS) ----
+function renderInvestmentChart(repoFilter, clientFilter) {
+  const el = document.getElementById('investmentChart');
+  const tooltip = document.getElementById('investmentTooltip');
+  const legendEl = document.getElementById('investmentLegend');
+
+  const scoped = RECORDS.filter(r =>
+    (repoFilter === 'all' || r.repo === repoFilter) &&
+    (clientFilter === 'all' || getRepoClient(r.repo) === clientFilter)
+  );
+  if (scoped.length === 0) { el.innerHTML = '<p class="empty-note">No activity in this period.</p>'; legendEl.innerHTML = ''; tooltip.style.opacity = 0; return; }
+
+  const clientNames = [...new Set(scoped.map(r => getRepoClient(r.repo)))].sort();
+  const byMonth = {};
+  for (const r of scoped) {
+    const c = getRepoClient(r.repo);
+    if (!byMonth[r.month]) byMonth[r.month] = {};
+    byMonth[r.month][c] = (byMonth[r.month][c] || 0) + r.cost + recordMyTime(r);
+  }
+  const monthsHere = Object.keys(byMonth).sort();
+  const palette = ['var(--series-1)', 'var(--series-2)', 'var(--series-3)', 'var(--series-4)', 'var(--series-5)'];
+  const colorFor = c => palette[clientNames.indexOf(c) % palette.length];
+
+  const padL = 60, padR = 10, padT = 10, padB = 40;
+  const colGap = 12;
+  const colW = Math.max((840 / monthsHere.length) - colGap, 24);
+  const W = padL + monthsHere.length * (colW + colGap) + padR;
+  const H = 260;
+  const plotH = H - padT - padB;
+  const totals = monthsHere.map(m => clientNames.reduce((a, c) => a + (byMonth[m][c] || 0), 0));
+  const maxTotal = Math.max(...totals, 1);
+
+  const gridY = [0, 0.25, 0.5, 0.75, 1].map(f => {
+    const val = maxTotal * f;
+    const y = (padT + (1 - f) * plotH).toFixed(1);
+    return `<line class="gridline" x1="${padL}" x2="${W - padR}" y1="${y}" y2="${y}" />
+            <text class="axis-label" x="${padL - 6}" y="${(+y + 3).toFixed(1)}" text-anchor="end">${fmtUsd(val)}</text>`;
+  }).join('');
+
+  const cols = monthsHere.map((m, i) => {
+    const x = padL + i * (colW + colGap);
+    let yCursor = padT + plotH;
+    const segs = clientNames.map(c => {
+      const val = byMonth[m][c] || 0;
+      const h = (val / maxTotal) * plotH;
+      const y = yCursor - h;
+      yCursor = y;
+      return `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${colW.toFixed(1)}" height="${Math.max(h,0).toFixed(1)}" fill="${colorFor(c)}" />`;
+    }).join('');
+    const labelX = (x + colW / 2).toFixed(1);
+    return `<g class="hover-target" data-i="${i}">
+      ${segs}
+      <rect x="${x.toFixed(1)}" y="${padT}" width="${colW.toFixed(1)}" height="${plotH.toFixed(1)}" fill="transparent" />
+      <text class="axis-label" x="${labelX}" y="${H - 10}" text-anchor="middle">${m}</text>
+    </g>`;
+  }).join('');
+
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}">${gridY}${cols}</svg>`;
+  legendEl.innerHTML = clientNames.map(c => `<div class="legend-item"><span class="swatch" style="background:${colorFor(c)}"></span>${c}</div>`).join('');
+
+  el.querySelectorAll('.hover-target').forEach(g => {
+    g.addEventListener('mouseenter', () => {
+      const m = monthsHere[+g.dataset.i];
+      const lines = clientNames.map(c => `${c}: ${fmtUsd2(byMonth[m][c] || 0)}`).join('<br>');
+      tooltip.innerHTML = `<strong>${monthLabel(m)}</strong><br>${lines}`;
+      tooltip.style.opacity = 1;
+      const wrapRect = el.getBoundingClientRect();
+      const gRect = g.getBoundingClientRect();
+      tooltip.style.left = (gRect.left - wrapRect.left + gRect.width / 2) + 'px';
+      tooltip.style.top = (gRect.top - wrapRect.top - 10) + 'px';
+    });
+    g.addEventListener('mouseleave', () => { tooltip.style.opacity = 0; });
+  });
+}
+
+// ---- Invoicing tab ----
+function renderInvoiceOutput(data) {
+  const el = document.getElementById('invoiceOutput');
+  const printBtn = document.getElementById('printInvoiceBtn');
+  const csvBtn = document.getElementById('downloadInvoiceCsvBtn');
+  lastInvoiceData = data;
+  const hasTime = data.lineItems && data.lineItems.length > 0;
+  const hasExpenses = data.expenseItems && data.expenseItems.length > 0;
+  if (!hasTime && !hasExpenses) {
+    el.innerHTML = '<p class="empty-note">No billable activity for this client/period.</p>';
+    printBtn.style.display = 'none';
+    csvBtn.style.display = 'none';
+    return;
+  }
+  const byRepo = {};
+  for (const li of data.lineItems) {
+    if (!byRepo[li.repo]) byRepo[li.repo] = [];
+    byRepo[li.repo].push(li);
+  }
+  const repoBlocks = Object.entries(byRepo).map(([repo, items]) => {
+    const subtotalHours = items.reduce((a,i) => a + i.hours, 0);
+    const subtotal = items.reduce((a,i) => a + i.amount, 0);
+    const rows = items.map(i => { const context = i.summary || i.note; return `<tr><td>${i.day}${context ? ` <span class="section-note" style="display:inline">— ${context}</span>` : ''}</td><td class="num">${i.hours.toFixed(2)}h${i.adjusted ? ' <span title="Includes a Time-tab adjustment or manual entry">•</span>' : ''}</td><td class="num">${fmtUsd2(i.amount)}</td></tr>`; }).join('');
+    return `<h3 style="font-size:0.9rem;margin:20px 0 6px">${repoDisplayName(repo)}</h3>
+      <table class="invoice-table">
+      <colgroup><col><col style="width:90px"><col style="width:110px"></colgroup>
+      <thead><tr><th>Day</th><th class="num">Hours</th><th class="num">Amount</th></tr></thead>
+      <tbody>${rows}</tbody>
+      <tfoot><tr><td style="text-align:right;font-weight:600">Subtotal</td><td class="num" style="font-weight:600">${subtotalHours.toFixed(2)}h</td><td class="num" style="font-weight:600">${fmtUsd2(subtotal)}</td></tr></tfoot></table>`;
+  }).join('');
+  const expenseBlock = hasExpenses ? `<h3 style="font-size:0.9rem;margin:20px 0 6px">Expenses</h3>
+    <table class="invoice-table">
+    <colgroup><col style="width:90px"><col style="width:120px"><col><col style="width:110px"></colgroup>
+    <thead><tr><th>Date</th><th>Category</th><th>Description</th><th class="num">Amount</th></tr></thead>
+    <tbody>${data.expenseItems.map(e => `<tr><td>${e.date}</td><td>${e.category}</td><td>${e.description}${e.repoKey ? ` <span class="section-note" style="display:inline">(${repoDisplayName(e.repoKey)})</span>` : ''}</td><td class="num">${fmtUsd2(e.amount)}</td></tr>`).join('')}</tbody>
+    <tfoot><tr><td colspan="3" style="text-align:right;font-weight:600">Subtotal</td><td class="num" style="font-weight:600">${fmtUsd2(data.expensesTotal)}</td></tr></tfoot></table>` : '';
+  const rowStyle = 'border-bottom:none';
+  const totalsRows = hasTime && hasExpenses
+    ? `<tr style="${rowStyle};color:var(--text-secondary)"><td style="${rowStyle}">Time</td><td class="num" style="${rowStyle}">${data.totals.hours.toFixed(1)}h</td><td class="num" style="${rowStyle}">${fmtUsd2(data.totals.amount)}</td></tr>
+       <tr style="${rowStyle};color:var(--text-secondary)"><td style="${rowStyle}">Expenses</td><td class="num" style="${rowStyle}"></td><td class="num" style="${rowStyle}">${fmtUsd2(data.expensesTotal)}</td></tr>
+       <tr style="${rowStyle};font-size:1.05rem;font-weight:700"><td style="${rowStyle}">Grand total</td><td class="num" style="${rowStyle}"></td><td class="num" style="${rowStyle}">${fmtUsd2(data.grandTotal)}</td></tr>`
+    : `<tr style="${rowStyle};font-size:1.05rem;font-weight:700"><td style="${rowStyle}">Total</td><td class="num" style="${rowStyle}">${hasTime ? data.totals.hours.toFixed(1) + 'h' : ''}</td><td class="num" style="${rowStyle}">${fmtUsd2(data.grandTotal)}</td></tr>`;
+  const totalsBlock = `<table class="invoice-table" style="margin-top:4px;margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid var(--border)">
+      <colgroup><col><col style="width:90px"><col style="width:110px"></colgroup>
+      <tbody>${totalsRows}</tbody>
+    </table>`;
+  el.innerHTML = `
+    <div class="invoice-header">
+      <div><strong>${data.client}</strong> &middot; ${data.month === 'all' ? 'All time' : monthLabel(data.month)}</div>
+      <div class="section-note">Rate: ${fmtUsd2(data.rates.activeRate)}/hr${data.roundingIncrementMinutes > 0 ? ` &middot; rounded to nearest ${data.roundingIncrementMinutes} min per line` : ''} &middot; idle-in-session time (at ${fmtUsd2(data.rates.idleRate)}/hr) is folded into Hours at its active-rate equivalent</div>
+    </div>
+    ${totalsBlock}
+    ${repoBlocks}
+    ${expenseBlock}`;
+  printBtn.style.display = 'inline-block';
+  csvBtn.style.display = 'inline-block';
+}
+document.getElementById('downloadInvoiceCsvBtn').addEventListener('click', () => {
+  if (!lastInvoiceData || (!lastInvoiceData.lineItems.length && !lastInvoiceData.expenseItems.length)) { alert('Generate an invoice first.'); return; }
+  const rows = lastInvoiceData.lineItems.map(i => [i.repo, i.day, i.hours.toFixed(2), '', i.summary || i.note || '', i.amount.toFixed(2)]);
+  for (const e of lastInvoiceData.expenseItems) rows.push(['Expense', e.date, '', e.category, e.description, e.amount.toFixed(2)]);
+  rows.push(['', '', '', '', 'Grand total', lastInvoiceData.grandTotal.toFixed(2)]);
+  downloadCSV(
+    `invoice-${lastInvoiceData.client.replace(/\s+/g, '-')}-${lastInvoiceData.month}.csv`,
+    ['Repo', 'Day', 'Hours', 'Category', 'Description', 'Amount'],
+    rows
+  );
+});
+document.getElementById('generateInvoiceBtn').addEventListener('click', async () => {
+  const client = document.getElementById('invoiceClient').value;
+  const month = document.getElementById('invoiceMonth').value;
+  if (!client) { alert('Add a client first (Settings tab).'); return; }
+  try {
+    const data = await fetch(`/api/invoice?client=${encodeURIComponent(client)}&month=${encodeURIComponent(month)}`).then(r => r.json());
+    renderInvoiceOutput(data);
+  } catch (e) { alert(e.message); }
+});
+document.getElementById('printInvoiceBtn').addEventListener('click', () => window.print());
+
+// ---- Client Report tab (value-delivered summary, not a billing document) ----
+async function renderClientReport(client, month, includeCost) {
+  const el = document.getElementById('reportOutput');
+  const printBtn = document.getElementById('printReportBtn');
+  el.innerHTML = '<p class="empty-note">Loading…</p>';
+  printBtn.style.display = 'none';
+
+  const filtered = RECORDS.filter(r => getRepoClient(r.repo) === client && (month === 'all' || r.month === month));
+  if (filtered.length === 0) {
+    el.innerHTML = '<p class="empty-note">No activity for this client in this period.</p>';
+    return;
+  }
+
+  let insights = null;
+  let deliverables = [];
+  try {
+    const params = new URLSearchParams({ client, month });
+    insights = await fetch('/api/insights?' + params.toString()).then(r => r.json());
+  } catch (e) { /* highlights are a bonus, not required -- report still renders without them */ }
+  try {
+    const invParams = new URLSearchParams({ client, month });
+    const inv = await fetch('/api/invoice?' + invParams.toString()).then(r => r.json());
+    deliverables = (inv.lineItems || [])
+      .filter(li => li.summary)
+      .map(li => ({ day: li.day, repo: li.repo, summary: li.summary }))
+      .sort((a, b) => b.day.localeCompare(a.day));
+  } catch (e) { /* deliverable summaries are a bonus, not required -- report still renders without them */ }
+
+  const byRepo = {};
+  for (const r of filtered) {
+    if (!byRepo[r.repo]) byRepo[r.repo] = { activeHours: 0, cost: 0, myTime: 0, days: new Set() };
+    byRepo[r.repo].activeHours += r.activeHours;
+    byRepo[r.repo].cost += r.cost;
+    byRepo[r.repo].myTime += recordMyTime(r);
+    byRepo[r.repo].days.add(r.day);
+  }
+  const repoRows = Object.entries(byRepo).map(([repo, d]) => {
+    const days = [...d.days].sort();
+    const sessions = month === 'all' ? (REPO_ALLTIME_SESSIONS[repo] || 0) : (REPO_MONTH_SESSIONS[repo]?.[month] || 0);
+    return { repo, activeHours: d.activeHours, cost: d.cost, myTime: d.myTime, sessions, firstDay: days[0], lastDay: days[days.length - 1] };
+  }).sort((a, b) => b.activeHours - a.activeHours);
+
+  const totalActiveHours = repoRows.reduce((a, r) => a + r.activeHours, 0);
+  const totalSessions = repoRows.reduce((a, r) => a + r.sessions, 0);
+  const activeDays = new Set(filtered.map(r => r.day)).size;
+  const totalCost = repoRows.reduce((a, r) => a + r.cost, 0);
+  const totalMyTime = repoRows.reduce((a, r) => a + r.myTime, 0);
+
+  const periodLabel = month === 'all' ? 'All time' : monthLabel(month);
+  const generatedOn = new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+
+  const highlights = [];
+  if (insights?.streaks?.longestStreak > 1) highlights.push(`Worked on this account ${insights.streaks.longestStreak} days in a row at the busiest point.`);
+  if (repoRows.length > 1) highlights.push(`Active across ${repoRows.length} projects this period.`);
+  const topRepo = repoRows[0];
+  if (topRepo) highlights.push(`Most time went to ${repoDisplayName(topRepo.repo)} (${topRepo.activeHours.toFixed(1)}h).`);
+
+  const tiles = [
+    ['Active hours', totalActiveHours.toFixed(1) + 'h'],
+    ['Sessions', fmtInt(totalSessions)],
+    ['Active days', activeDays],
+    ['Projects touched', repoRows.length],
+  ];
+  if (includeCost) tiles.push(['Investment', fmtUsd(totalCost + totalMyTime)]);
+
+  const repoTableRows = repoRows.map(r => `<tr>
+    <td>${repoDisplayName(r.repo)}</td>
+    <td class="num">${r.activeHours.toFixed(1)}h</td>
+    <td class="num">${fmtInt(r.sessions)}</td>
+    <td>${r.firstDay}</td>
+    <td>${r.lastDay}</td>
+    ${includeCost ? `<td class="num">${fmtUsd2(r.cost + r.myTime)}</td>` : ''}
+  </tr>`).join('');
+
+  const DELIVERABLE_CAP = 12;
+  const shownDeliverables = deliverables.slice(0, DELIVERABLE_CAP);
+  const deliverablesHtml = shownDeliverables.length ? `
+    <h2 style="margin-top:28px">What we delivered</h2>
+    <ul style="margin-top:8px">${shownDeliverables.map(d =>
+      `<li><strong>${d.day}</strong> — ${d.summary}${repoRows.length > 1 ? ` <span class="section-note" style="display:inline">(${repoDisplayName(d.repo)})</span>` : ''}</li>`
+    ).join('')}</ul>
+    ${deliverables.length > DELIVERABLE_CAP ? `<p class="section-note">+ ${deliverables.length - DELIVERABLE_CAP} more day${deliverables.length - DELIVERABLE_CAP === 1 ? '' : 's'} not shown here — see the full breakdown below.</p>` : ''}
+  ` : '';
+
+  el.innerHTML = `
+    <div class="invoice-header">
+      <div><strong>${client}</strong> — Value Delivered · ${periodLabel}</div>
+      <div class="section-note">Generated ${generatedOn}</div>
+    </div>
+    <div class="tiles" style="margin-top:16px">${tiles.map(([l,v]) => `<div class="tile"><div class="label">${l}</div><div class="value">${v}</div></div>`).join('')}</div>
+    ${deliverablesHtml}
+    ${highlights.length ? `<ul style="margin-top:${shownDeliverables.length ? '12px' : '16px'}">${highlights.map(h => `<li>${h}</li>`).join('')}</ul>` : ''}
+    <table style="margin-top:20px">
+      <thead><tr><th>Project</th><th class="num">Active hours</th><th class="num">Sessions</th><th>First</th><th>Last</th>${includeCost ? '<th class="num">Investment</th>' : ''}</tr></thead>
+      <tbody>${repoTableRows}</tbody>
+    </table>`;
+  printBtn.style.display = 'inline-block';
+}
+document.getElementById('generateReportBtn').addEventListener('click', () => {
+  const client = document.getElementById('reportClient').value;
+  const month = document.getElementById('reportMonth').value;
+  const includeCost = document.getElementById('reportIncludeCost').checked;
+  if (!client) { alert('Add a client first (Settings tab).'); return; }
+  renderClientReport(client, month, includeCost).catch(e => alert(e.message));
+});
+document.getElementById('printReportBtn').addEventListener('click', () => window.print());
+
+// ---- Tabs ----
+// Shared by the tab-button click handler and any in-page "jump to tab X"
+// link (e.g. clicking a day in the daily-working-hours chart to open that
+// day on the Time tab), so both stay in sync with exactly one tab-switch
+// implementation.
+function activateTab(tabName) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tabName));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === 'tab-' + tabName));
+  // The Client/Repo/Month bar only ever drives Dashboard/Insights -- on
+  // every other tab (each with its own scope, or none at all) it's dead
+  // chrome that implies a filtering behavior that isn't actually there.
+  document.getElementById('globalFilterBar').style.display = (tabName === 'dashboard' || tabName === 'insights' || tabName === 'things-to-try') ? '' : 'none';
+  if (tabName === 'settings') { renderClientsTab(); renderMappingTab(); }
+  if (tabName === 'invoicing') refreshInvoiceOptions();
+  if (tabName === 'report') refreshReportOptions();
+  if (tabName === 'recap') renderRecapTab();
+  if (tabName === 'time') {
+    const dateInput = document.getElementById('timeDate');
+    if (!dateInput.value) dateInput.value = brisbaneTodayStr();
+    renderTimeTabForDate(dateInput.value);
+  }
+  if (tabName === 'expenses') {
+    const dateInput = document.getElementById('newExpenseDate');
+    if (!dateInput.value) dateInput.value = brisbaneTodayStr();
+    refreshExpenseOptions();
+    loadExpenses().then(renderExpensesTab);
+  }
+}
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => activateTab(btn.dataset.tab));
+});
+
+function goToTimeTabForDate(dateStr) {
+  document.getElementById('timeDate').value = dateStr;
+  activateTab('time');
+}
+
+// ---- Recap tab ----
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+async function renderRecapTab() {
+  const heading = document.getElementById('recapHeading');
+  const subnote = document.getElementById('recapSubnote');
+  const tiles = document.getElementById('recapTiles');
+  const container = document.getElementById('recapProjects');
+  container.innerHTML = '<p class="empty-note">Loading…</p>';
+  tiles.innerHTML = '';
+
+  let data;
+  try {
+    data = await fetch('/api/recap').then(r => r.json());
+    if (data.error) throw new Error(data.error);
+  } catch (e) {
+    container.innerHTML = `<p class="empty-note">Failed to load recap: ${escapeHtml(e.message)}</p>`;
+    return;
+  }
+
+  const dayLabel = new Date(data.day + 'T12:00:00').toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  heading.textContent = `Yesterday — ${dayLabel}`;
+  subnote.textContent = data.projects.length
+    ? `${data.projects.length} project${data.projects.length === 1 ? '' : 's'} touched`
+    : 'Nothing recorded';
+
+  const totalCost = data.projects.reduce((a, p) => a + p.cost, 0);
+  const totalActive = data.projects.reduce((a, p) => a + p.activeHours, 0);
+  const totalCommits = data.projects.reduce((a, p) => a + (p.commits.available ? p.commits.commits.length : 0), 0);
+  const totalMemories = data.projects.reduce((a, p) => a + p.memories.length, 0);
+  tiles.innerHTML = `
+    <div class="tile"><div class="label">Projects touched</div><div class="value">${data.projects.length}</div></div>
+    <div class="tile"><div class="label">Active hours</div><div class="value">${totalActive.toFixed(1)}</div></div>
+    <div class="tile"><div class="label">Cost</div><div class="value">${fmtUsd2(totalCost)}</div></div>
+    <div class="tile"><div class="label">Memories saved</div><div class="value">${totalMemories}</div></div>
+    <div class="tile"><div class="label">Verified commits</div><div class="value">${totalCommits}</div></div>
+  `;
+
+  if (!data.projects.length) {
+    container.innerHTML = '<p class="empty-note">No activity recorded for yesterday. If you chatted since the last refresh, hit "Run DB sync" above.</p>';
+    return;
+  }
+
+  const projectsHtml = data.projects.map(p => {
+    const commits = p.commits.available ? p.commits.commits : [];
+    const commitsHtml = commits.length
+      ? `<div class="recap-section-label">Commits</div><ul class="recap-list">${commits.map(c =>
+          `<li><span class="recap-commit-hash">${c.hash}</span> ${escapeHtml(c.message)}</li>`).join('')}</ul>`
+      : (p.detectedCommits > 0 ? `<p class="empty-note" style="padding:4px 0;">${p.detectedCommits} commit(s) detected in the session log, but ${escapeHtml((p.commits.reason || 'not verifiable via git log')).toLowerCase()}</p>` : '');
+    const memoriesHtml = p.memories.length
+      ? `<div class="recap-section-label">Memories saved</div><ul class="recap-list">${p.memories.map(m =>
+          `<li><strong>${escapeHtml(m.name)}</strong>${m.type ? ` <span class="recap-mem-type">[${escapeHtml(m.type)}]</span>` : ''}${m.description ? ' — ' + escapeHtml(m.description) : ''}</li>`).join('')}</ul>`
+      : '';
+    // Session-recap narrative (SessionEnd hook / backfilled) -- the "what
+    // actually happened" story for days with real activity but nothing in
+    // git and nothing curated to memory, e.g. a discussion/investigation
+    // day. Not "verified" the way commits are, so it's framed separately.
+    const recapHtml = p.recap && (p.recap.happened.length || p.recap.next.length)
+      ? `<div class="recap-section-label">What happened</div>`
+        + (p.recap.happened.length ? `<ul class="recap-list">${p.recap.happened.map(h => `<li>${escapeHtml(h)}</li>`).join('')}</ul>` : '')
+        + (p.recap.next.length ? `<div class="recap-section-label" style="margin-top:8px;">What's next</div><ul class="recap-list">${p.recap.next.map(n => `<li>${escapeHtml(n)}</li>`).join('')}</ul>` : '')
+      : '';
+    return `<div class="recap-card">
+      <div class="recap-card-header">
+        <h3>${escapeHtml(repoDisplayName(p.repo))}</h3>
+        <span class="recap-badge">${escapeHtml(p.client)}</span>
+      </div>
+      <div class="recap-stats">
+        <span>${fmtUsd2(p.cost)}</span>
+        <span>${fmtInt(p.messages)} messages</span>
+        <span>${p.activeHours.toFixed(2)}h active</span>
+        <span>${p.startTime || '?'}–${p.endTime || '?'}</span>
+      </div>
+      ${recapHtml}
+      ${memoriesHtml}
+      ${commitsHtml}
+      ${!commitsHtml && !memoriesHtml && !recapHtml ? '<p class="empty-note" style="padding:4px 0;">No verified commits, saved memories, or session recap — likely discussion/investigation only.</p>' : ''}
+    </div>`;
+  }).join('');
+
+  // Every other C:\code project's last-known note, regardless of when --
+  // same card styling as yesterday's projects above (not a separate table
+  // further down the page), just visually separated by a divider since
+  // it's a different slice of data (all-time last note, not "yesterday").
+  const notes = data.latestNotes || [];
+  const notesHtml = notes.length ? `
+    <p class="section-note" style="margin:28px 0 12px;padding-top:16px;border-top:1px solid var(--border);">
+      Other projects — last known activity, regardless of when
+    </p>
+    ${notes.map(n => {
+      const updated = new Date(n.mtime).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+      const noteHtml = n.source === 'recap'
+        ? (n.happened.length ? `<div class="recap-section-label">What happened</div><ul class="recap-list">${n.happened.map(h => `<li>${escapeHtml(h)}</li>`).join('')}</ul>` : '')
+          + (n.next.length ? `<div class="recap-section-label" style="margin-top:8px;">What's next</div><ul class="recap-list">${n.next.map(x => `<li>${escapeHtml(x)}</li>`).join('')}</ul>` : '')
+        : `<div class="recap-section-label">Memory saved</div><p><strong>${escapeHtml(n.name)}</strong>${n.type ? ` <span class="recap-mem-type">[${escapeHtml(n.type)}]</span>` : ''}${n.description ? ' — ' + escapeHtml(n.description) : ''}</p>`;
+      return `<div class="recap-card">
+        <div class="recap-card-header">
+          <h3>${escapeHtml(repoDisplayName(n.repo))}</h3>
+          <span class="recap-badge">${escapeHtml(n.client)}</span>
+        </div>
+        <div class="recap-stats"><span>Updated ${updated}</span></div>
+        ${noteHtml}
+      </div>`;
+    }).join('')}
+  ` : '';
+
+  container.innerHTML = projectsHtml + notesHtml;
+}
+
+document.getElementById('syncNowBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('syncNowBtn');
+  const status = document.getElementById('syncStatus');
+  btn.disabled = true;
+  status.textContent = 'Syncing…';
+  try {
+    await postJSON('/api/sync', {});
+    status.textContent = 'Synced ✓';
+    showToast('Database synced');
+    await renderRecapTab();
+    const data = await fetch('/api/data').then(r => r.json());
+    RECORDS = data.records;
+    REPO_MONTH_SESSIONS = data.repoMonthSessions;
+    REPO_ALLTIME_SESSIONS = data.repoAllTimeSessions;
+    applyClientsConfig(data.clientsConfig);
+    months = [...new Set(RECORDS.map(r => r.month))].sort();
+    repoList = [...new Set(RECORDS.map(r => r.repo))].sort((a,b) => repoDisplayName(a).localeCompare(repoDisplayName(b)));
+    setupMonthFilter();
+    refreshClientFilterOptions();
+    refreshRepoFilterOptions();
+  } catch (e) {
+    status.textContent = 'Sync failed';
+    alert(e.message);
+  } finally {
+    btn.disabled = false;
+    setTimeout(() => { if (status.textContent !== 'Syncing…') status.textContent = ''; }, 4000);
+  }
+});
+
+// ---- Clients tab ----
+function renderClientsTab() {
+  const tbody = document.querySelector('#clientsTable tbody');
+  const names = Object.keys(CLIENTS);
+  if (names.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" class="empty-note">No clients yet — add one below.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = names.map(name => {
+    const rates = CLIENTS[name];
+    return `<tr>
+      <td>${name}</td>
+      <td class="num"><input type="number" class="rate-input" data-client="${name}" data-field="activeRate" value="${rates.activeRate}"></td>
+      <td class="num"><input type="number" class="rate-input" data-client="${name}" data-field="idleRate" value="${rates.idleRate}"></td>
+      <td class="num"><input type="number" class="rate-input" data-client="${name}" data-field="manualMultiplier" value="${rates.manualMultiplier}" step="0.1"></td>
+      <td class="num"><input type="number" class="rate-input" data-client="${name}" data-field="roundingIncrementMinutes" value="${rates.roundingIncrementMinutes}" step="1"></td>
+      <td><button class="link-btn delete-client-btn" data-client="${name}">Remove</button></td>
+    </tr>`;
+  }).join('');
+
+  tbody.querySelectorAll('.rate-input').forEach(inp => {
+    inp.addEventListener('change', async () => {
+      const name = inp.dataset.client;
+      const payload = {
+        name, activeRate: CLIENTS[name].activeRate, idleRate: CLIENTS[name].idleRate,
+        manualMultiplier: CLIENTS[name].manualMultiplier, roundingIncrementMinutes: CLIENTS[name].roundingIncrementMinutes,
+      };
+      payload[inp.dataset.field] = parseFloat(inp.value) || 0;
+      try {
+        applyClientsConfig(await postJSON('/api/clients', payload));
+        showToast('Saved');
+        renderClientsTab();
+        render(monthSelect.value, repoSelect.value, clientSelect.value);
+      } catch (e) { alert(e.message); }
+    });
+  });
+  tbody.querySelectorAll('.delete-client-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const client = btn.dataset.client;
+      if (!confirm(`Remove client "${client}"? Repos assigned to it will become Unassigned.`)) return;
+      try {
+        applyClientsConfig(await deleteJSON('/api/clients/' + encodeURIComponent(client)));
+        showToast('Removed');
+        renderClientsTab();
+        renderMappingTab();
+        refreshClientFilterOptions();
+        refreshRepoFilterOptions();
+        refreshInvoiceOptions();
+        refreshReportOptions();
+        render(monthSelect.value, repoSelect.value, clientSelect.value);
+      } catch (e) { alert(e.message); }
+    });
+  });
+}
+
+document.getElementById('addClientBtn').addEventListener('click', async () => {
+  const nameInput = document.getElementById('newClientName');
+  const activeInput = document.getElementById('newClientActive');
+  const idleInput = document.getElementById('newClientIdle');
+  const multiplierInput = document.getElementById('newClientMultiplier');
+  const roundingInput = document.getElementById('newClientRounding');
+  const name = nameInput.value.trim();
+  if (!name) { alert('Enter a client name.'); return; }
+  if (CLIENTS[name] || name === UNASSIGNED) { alert(`Client "${name}" already exists.`); return; }
+  try {
+    applyClientsConfig(await postJSON('/api/clients', {
+      name, activeRate: parseFloat(activeInput.value) || 0, idleRate: parseFloat(idleInput.value) || 0,
+      manualMultiplier: parseFloat(multiplierInput.value) || 1.5, roundingIncrementMinutes: parseFloat(roundingInput.value) || 0,
+    }));
+    nameInput.value = '';
+    activeInput.value = '175';
+    idleInput.value = '75';
+    multiplierInput.value = '1.5';
+    roundingInput.value = '15';
+    showToast('Client added');
+    renderClientsTab();
+    renderMappingTab();
+    refreshClientFilterOptions();
+    refreshInvoiceOptions();
+    refreshReportOptions();
+    render(monthSelect.value, repoSelect.value, clientSelect.value);
+  } catch (e) { alert(e.message); }
+});
+
+// ---- Assign Repos tab ----
+function renderMappingTab() {
+  const tbody = document.querySelector('#mappingTable tbody');
+  const clientOptions = [UNASSIGNED, ...Object.keys(CLIENTS)];
+  tbody.innerHTML = repoList.map(repo => {
+    const current = getRepoClient(repo);
+    const options = clientOptions.map(c => `<option value="${c}" ${c === current ? 'selected' : ''}>${c}</option>`).join('');
+    return `<tr><td title="${repo}">${repoDisplayName(repo)}</td><td><select class="repo-client-select" data-repo="${repo}">${options}</select></td></tr>`;
+  }).join('');
+
+  tbody.querySelectorAll('.repo-client-select').forEach(sel => {
+    sel.addEventListener('change', async () => {
+      const repo = sel.dataset.repo;
+      const client = sel.value === UNASSIGNED ? null : sel.value;
+      const prevValue = getRepoClient(repo);
+      try {
+        applyClientsConfig(await postJSON('/api/repo-clients', { repo, client }));
+        showToast('Saved');
+        refreshRepoFilterOptions();
+        render(monthSelect.value, repoSelect.value, clientSelect.value);
+      } catch (e) { alert(e.message); sel.value = prevValue; }
+    });
+  });
+}
+
+// ---- Time tab ----
+const BRIS_OFFSET_MS = 10 * 60 * 60 * 1000;
+function brisbaneTodayStr() { return new Date(Date.now() + BRIS_OFFSET_MS).toISOString().slice(0, 10); }
+
+let TIME_DATE_DATA = null;
+
+async function renderTimeTabForDate(dateStr) {
+  TIME_DATE_DATA = await fetch('/api/time-entries?date=' + dateStr).then(r => r.json());
+  populateTimeClientSelect();
+  renderTimeRepoTable();
+  renderTimeTotals();
+}
+
+// Client-level entries (no repo -- meetings, offline planning) render as
+// extra rows in the same table, labeled "Time" instead of a repo name, so
+// the tfoot total covers everything in one sum.
+function renderTimeRepoTable() {
+  const tbody = document.querySelector('#timeRepoTable tbody');
+  const tfoot = document.querySelector('#timeRepoTable tfoot');
+  const showAll = document.getElementById('timeShowAll').checked;
+  const repoRows = TIME_DATE_DATA.repoRows.filter(r => showAll || r.auto > 0 || r.adjustment != null || r.manual != null);
+  const clientRows = TIME_DATE_DATA.clientRows;
+  if (repoRows.length === 0 && clientRows.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="7" class="empty-note">No repo activity this day — check "show all repos" to add time manually.</td></tr>';
+    tfoot.innerHTML = '';
+  } else {
+    const repoRowsHtml = repoRows.map(r => `<tr data-kind="repo" data-repo="${r.repo}">
+      <td title="${r.repo}">${repoDisplayName(r.repo)}</td>
+      <td>${r.clientName}</td>
+      <td class="num num-center">${r.auto.toFixed(1)}</td>
+      <td class="num num-center"><input type="number" class="time-input" data-field="adjustment" step="0.25" min="0" value="${r.adjustment != null ? r.adjustment : ''}" placeholder="—"></td>
+      <td class="num num-center"><input type="number" class="time-input" data-field="manual" step="0.25" min="0" value="${r.manual != null ? r.manual : ''}" placeholder="—"></td>
+      <td><input type="text" class="time-note-input" value="${r.adjustment != null ? r.adjustmentNote : (r.manualNote || '')}" placeholder="Note"></td>
+      <td><input type="text" class="time-summary-input" value="${(r.summary || '').replace(/"/g, '&quot;')}" placeholder="What was the key deliverable?" style="width:100%" title="${r.summarySource === 'ai' ? 'Auto-generated — edit and save to make it a permanent correction' : ''}"></td>
+    </tr>`).join('');
+    const clientRowsHtml = clientRows.map(r => `<tr data-kind="client" data-client-row-id="${r.id}" data-client-name="${r.clientName}">
+      <td>Time</td>
+      <td>${r.clientName}</td>
+      <td class="num num-center">0.0</td>
+      <td class="num num-center">—</td>
+      <td class="num num-center"><input type="number" class="time-input" data-field="manual" step="0.25" min="0" value="${r.hours}" placeholder="—"></td>
+      <td><input type="text" class="time-note-input" value="${(r.note || '').replace(/"/g, '&quot;')}" placeholder="Note"></td>
+      <td><button type="button" class="link-btn remove-client-time-btn" data-id="${r.id}">Remove</button></td>
+    </tr>`).join('');
+    tbody.innerHTML = repoRowsHtml + clientRowsHtml;
+
+    const modellingTotal = repoRows.reduce((a, r) => a + r.auto, 0);
+    const adjTotal = repoRows.reduce((a, r) => a + (r.adjustment != null ? r.adjustment : 0), 0);
+    const manualTotal = repoRows.reduce((a, r) => a + (r.manual || 0), 0) + clientRows.reduce((a, r) => a + r.hours, 0);
+    tfoot.innerHTML = `<tr>
+      <td colspan="2">Total</td>
+      <td class="num num-center">${modellingTotal.toFixed(1)}</td>
+      <td class="num num-center">${adjTotal.toFixed(1)}</td>
+      <td class="num num-center">${manualTotal.toFixed(1)}</td>
+      <td></td>
+      <td></td>
+    </tr>`;
+  }
+  tbody.querySelectorAll('tr[data-kind="repo"]').forEach(tr => {
+    tr.querySelectorAll('.time-input, .time-note-input').forEach(inp => {
+      inp.addEventListener('change', () => saveTimeRow(tr));
+    });
+    tr.querySelector('.time-summary-input').addEventListener('change', () => saveDaySummary(tr));
+  });
+  tbody.querySelectorAll('tr[data-kind="client"]').forEach(tr => {
+    tr.querySelectorAll('.time-input, .time-note-input').forEach(inp => {
+      inp.addEventListener('change', () => saveClientTimeRow(tr));
+    });
+    tr.querySelector('.remove-client-time-btn').addEventListener('click', () => removeClientTimeRow(tr));
+  });
+}
+
+async function saveClientTimeRow(tr) {
+  const client = tr.dataset.clientName;
+  const date = document.getElementById('timeDate').value;
+  const manInput = tr.querySelector('[data-field="manual"]');
+  const note = tr.querySelector('.time-note-input').value.trim();
+  try {
+    TIME_DATE_DATA = await postJSON('/api/time-entries', { client, date, type: 'manual', hours: parseFloat(manInput.value) || 0, note });
+    showToast('Saved');
+    renderTimeRepoTable();
+    renderTimeTotals();
+  } catch (e) { alert(e.message); }
+}
+
+async function removeClientTimeRow(tr) {
+  const id = tr.dataset.clientRowId;
+  try {
+    await deleteJSON('/api/time-entries/' + id);
+    TIME_DATE_DATA.clientRows = TIME_DATE_DATA.clientRows.filter(r => String(r.id) !== String(id));
+    renderTimeRepoTable();
+    renderTimeTotals();
+    showToast('Removed');
+  } catch (e) { alert(e.message); }
+}
+
+async function saveDaySummary(tr) {
+  const repo = tr.dataset.repo;
+  const date = document.getElementById('timeDate').value;
+  const summary = tr.querySelector('.time-summary-input').value.trim();
+  try {
+    TIME_DATE_DATA = await postJSON('/api/day-summaries', { repo, date, summary });
+    showToast('Saved');
+    renderTimeRepoTable();
+  } catch (e) { alert(e.message); }
+}
+
+async function saveTimeRow(tr) {
+  const repo = tr.dataset.repo;
+  const date = document.getElementById('timeDate').value;
+  const adjInput = tr.querySelector('[data-field="adjustment"]');
+  const manInput = tr.querySelector('[data-field="manual"]');
+  const note = tr.querySelector('.time-note-input').value.trim();
+  try {
+    await postJSON('/api/time-entries', { repo, date, type: 'adjustment', hours: parseFloat(adjInput.value) || 0, note });
+    TIME_DATE_DATA = await postJSON('/api/time-entries', { repo, date, type: 'manual', hours: parseFloat(manInput.value) || 0, note });
+    showToast('Saved');
+    renderTimeRepoTable();
+    renderTimeTotals();
+  } catch (e) { alert(e.message); }
+}
+
+function populateTimeClientSelect() {
+  const sel = document.getElementById('newTimeClient');
+  const names = Object.keys(CLIENTS);
+  sel.innerHTML = names.length ? names.map(c => `<option value="${c}">${c}</option>`).join('') : '<option value="">No clients yet</option>';
+}
+
+function renderTimeTotals() {
+  const repoTotal = TIME_DATE_DATA.repoRows.reduce((a, r) => a + (r.adjustment != null ? r.adjustment : r.auto) + (r.manual || 0), 0);
+  const clientTotal = TIME_DATE_DATA.clientRows.reduce((a, r) => a + r.hours, 0);
+  document.getElementById('timeDayTotal').textContent = `Day total: ${(repoTotal + clientTotal).toFixed(2)}h`;
+}
+
+document.getElementById('timeDate').addEventListener('change', () => renderTimeTabForDate(document.getElementById('timeDate').value));
+document.getElementById('timeShowAll').addEventListener('change', renderTimeRepoTable);
+
+// Prev/Next day: plain UTC date math on the 'YYYY-MM-DD' string (not local-
+// timezone Date math) so a step is always exactly one calendar day with no
+// DST-related off-by-one risk.
+function stepTimeDate(deltaDays) {
+  const input = document.getElementById('timeDate');
+  const d = new Date((input.value || brisbaneTodayStr()) + 'T00:00:00Z');
+  d.setUTCDate(d.getUTCDate() + deltaDays);
+  const next = d.toISOString().slice(0, 10);
+  input.value = next;
+  renderTimeTabForDate(next);
+}
+document.getElementById('timePrevDayBtn').addEventListener('click', () => stepTimeDate(-1));
+document.getElementById('timeNextDayBtn').addEventListener('click', () => stepTimeDate(1));
+
+document.getElementById('addTimeClientBtn').addEventListener('click', async () => {
+  const client = document.getElementById('newTimeClient').value;
+  const hours = parseFloat(document.getElementById('newTimeHours').value) || 0;
+  const note = document.getElementById('newTimeNote').value.trim();
+  const date = document.getElementById('timeDate').value;
+  if (!client) { alert('Choose a client.'); return; }
+  if (hours <= 0) { alert('Enter hours greater than 0.'); return; }
+  try {
+    TIME_DATE_DATA = await postJSON('/api/time-entries', { client, date, type: 'manual', hours, note });
+    document.getElementById('newTimeHours').value = '';
+    document.getElementById('newTimeNote').value = '';
+    renderTimeRepoTable();
+    renderTimeTotals();
+    showToast('Saved');
+  } catch (e) { alert(e.message); }
+});
+
+// ---- Expenses tab ----
+let EXPENSES = [];
+let lastExpenseRows = null;
+
+async function loadExpenses() {
+  const data = await fetch('/api/expenses').then(r => r.json());
+  EXPENSES = data.expenses;
+}
+
+function refreshExpenseOptions() {
+  const sel = document.getElementById('expenseClient');
+  const prior = sel.value;
+  const names = Object.keys(CLIENTS);
+  sel.innerHTML = names.length ? names.map(c => `<option value="${c}">${c}</option>`).join('') : '<option value="">No clients yet</option>';
+  if (names.includes(prior)) sel.value = prior;
+  const msel = document.getElementById('expenseMonth');
+  const priorMonth = msel.value;
+  msel.innerHTML = ['<option value="all">All time</option>'].concat(months.map(m => `<option value="${m}">${monthLabel(m)}</option>`)).join('');
+  const curMonth = currentMonthKey();
+  msel.value = (priorMonth && months.includes(priorMonth)) ? priorMonth : (months.includes(curMonth) ? curMonth : 'all');
+  refreshNewExpenseRepoOptions();
+}
+
+function refreshNewExpenseRepoOptions() {
+  const client = document.getElementById('expenseClient').value;
+  const sel = document.getElementById('newExpenseRepo');
+  const reposForClient = repoList.filter(r => getRepoClient(r) === client);
+  sel.innerHTML = '<option value="">—</option>' + reposForClient.map(r => `<option value="${r}">${repoDisplayName(r)}</option>`).join('');
+}
+
+function renderExpensesTab() {
+  const client = document.getElementById('expenseClient').value;
+  const month = document.getElementById('expenseMonth').value;
+  const tbody = document.querySelector('#expensesTable tbody');
+  const rows = EXPENSES.filter(e => e.clientName === client && (month === 'all' || e.date.slice(0, 7) === month));
+  lastExpenseRows = rows;
+  if (rows.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="7" class="empty-note">No expenses for this client/month.</td></tr>';
+  } else {
+    tbody.innerHTML = rows.map(e => `<tr>
+      <td>${e.date}</td>
+      <td>${e.category}</td>
+      <td>${e.description}</td>
+      <td>${e.repoKey ? repoDisplayName(e.repoKey) : ''}</td>
+      <td class="num">${fmtUsd2(e.amount)}</td>
+      <td>${e.isRecurring ? `<span class="recap-badge">recurring (${e.recurrenceInterval})</span>` : (e.isGeneratedOccurrence ? '<span class="recap-badge">recurring</span>' : '')}</td>
+      <td><button class="link-btn delete-expense-btn" data-id="${e.id}">Remove</button></td>
+    </tr>`).join('');
+  }
+  const total = rows.reduce((a, e) => a + e.amount, 0);
+  document.getElementById('expenseTotal').textContent = `Total: ${fmtUsd2(total)}`;
+
+  tbody.querySelectorAll('.delete-expense-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      if (!confirm('Remove this expense? If it\'s a recurring template, past occurrences are kept.')) return;
+      try {
+        const data = await deleteJSON('/api/expenses/' + btn.dataset.id);
+        EXPENSES = data.expenses;
+        renderExpensesTab();
+        showToast('Removed');
+      } catch (e) { alert(e.message); }
+    });
+  });
+}
+
+document.getElementById('expenseClient').addEventListener('change', () => { refreshNewExpenseRepoOptions(); renderExpensesTab(); });
+document.getElementById('expenseMonth').addEventListener('change', renderExpensesTab);
+document.getElementById('newExpenseRecurring').addEventListener('change', () => {
+  const on = document.getElementById('newExpenseRecurring').checked;
+  document.getElementById('newExpenseIntervalField').style.display = on ? 'flex' : 'none';
+  document.getElementById('newExpenseEndField').style.display = on ? 'flex' : 'none';
+});
+
+document.getElementById('addExpenseBtn').addEventListener('click', async () => {
+  const clientName = document.getElementById('expenseClient').value;
+  const date = document.getElementById('newExpenseDate').value;
+  const category = document.getElementById('newExpenseCategory').value;
+  const description = document.getElementById('newExpenseDescription').value.trim();
+  const repoKey = document.getElementById('newExpenseRepo').value || null;
+  const amount = parseFloat(document.getElementById('newExpenseAmount').value);
+  const isRecurring = document.getElementById('newExpenseRecurring').checked;
+  const recurrenceInterval = document.getElementById('newExpenseInterval').value;
+  const recurrenceEndDate = document.getElementById('newExpenseEndDate').value || null;
+  if (!clientName) { alert('Choose a client first.'); return; }
+  if (!date) { alert('Choose a date.'); return; }
+  if (!description) { alert('Enter a description.'); return; }
+  if (!Number.isFinite(amount)) { alert('Enter an amount.'); return; }
+  try {
+    const data = await postJSON('/api/expenses', { clientName, repoKey, date, category, description, amount, isRecurring, recurrenceInterval, recurrenceEndDate });
+    EXPENSES = data.expenses;
+    document.getElementById('newExpenseDescription').value = '';
+    document.getElementById('newExpenseAmount').value = '';
+    document.getElementById('newExpenseRecurring').checked = false;
+    document.getElementById('newExpenseIntervalField').style.display = 'none';
+    document.getElementById('newExpenseEndField').style.display = 'none';
+    renderExpensesTab();
+    showToast('Added');
+  } catch (e) { alert(e.message); }
+});
+
+document.getElementById('downloadExpensesCsvBtn').addEventListener('click', () => {
+  if (!lastExpenseRows || lastExpenseRows.length === 0) { alert('No data to export for the current filter.'); return; }
+  downloadCSV(
+    'expenses.csv',
+    ['Date', 'Client', 'Category', 'Description', 'Repo', 'Amount', 'Recurring'],
+    lastExpenseRows.map(e => [e.date, e.clientName, e.category, e.description, e.repoKey || '', e.amount.toFixed(2), e.isRecurring ? e.recurrenceInterval : ''])
+  );
+});
+
+// ---- Boot ----
+async function boot() {
+  const data = await fetch('/api/data').then(r => r.json());
+  RECORDS = data.records;
+  REPO_MONTH_SESSIONS = data.repoMonthSessions;
+  REPO_ALLTIME_SESSIONS = data.repoAllTimeSessions;
+  CLIENT_LEVEL_TIME = data.clientLevelTime || [];
+  applyClientsConfig(data.clientsConfig);
+  months = [...new Set(RECORDS.map(r => r.month))].sort();
+  repoList = [...new Set(RECORDS.map(r => r.repo))].sort((a,b) => repoDisplayName(a).localeCompare(repoDisplayName(b)));
+
+  setupMonthFilter();
+  refreshClientFilterOptions();
+  refreshRepoFilterOptions();
+  refreshInvoiceOptions();
+  refreshReportOptions();
+  render(monthSelect.value, 'all', 'all');
+  activateTab('recap'); // also applies the filter-bar visibility rule to the tab shown on first load
+}
+boot().catch(e => {
+  console.error(e);
+  document.getElementById('subtitle').textContent = 'Failed to load — is the server running? (node server.js)';
+});
+</script>
