@@ -87,15 +87,24 @@ No database server to install — everything lives in a single local SQLite
 file (`data/claude_usage_dashboard.sqlite`, created automatically, never
 committed to git).
 
+**A fresh clone starts completely empty** — no sessions, no clients, no
+rates. Nothing is bundled or shared between installs; every copy of this app
+only ever reads `~/.claude/projects` **on the machine it's run on**.
+
 ```sh
 npm install
-node sync.js       # scans ~/.claude/projects, upserts into a local SQLite file (created on first run)
+node sync.js       # scans ~/.claude/projects on THIS machine, upserts into a local SQLite file (created on first run)
 node server.js     # starts the live app at http://localhost:4173
 ```
 
-Open `http://localhost:4173` in a browser. `node scripts/init-db.js` creates
-(or verifies) the empty database explicitly, if you want to see that step in
-isolation before running a real sync — useful mainly for a fresh install.
+Open `http://localhost:4173` in a browser — the Dashboard tab will be blank
+until `sync.js` has run at least once. From there, add clients and their
+rates under the Clients tab, then assign repos to them under Assign Repos;
+until a repo is assigned, its cost shows as $0.
+
+`node scripts/init-db.js` creates (or verifies) the empty database
+explicitly, if you want to see that step in isolation before running a real
+sync — useful mainly for a fresh install.
 
 ### Bringing in history from before this app existed
 
