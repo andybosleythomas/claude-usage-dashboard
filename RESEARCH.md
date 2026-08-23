@@ -201,3 +201,66 @@ historical/DB-backed tool well — this stays a `ccusage`-shaped niche), and any
 "time saved" framing presented as a hard number rather than an adjustable,
 clearly-labeled assumption (the METR findings make that an explicit
 non-goal).
+
+## Research update - 2026-08-23
+
+Weekly check against this file's last entry (2026-08-03/04). Found genuine
+movement in three of the five areas; freelance-billing tools (still no
+AI-specific billing feature anywhere — Bonsai, HoneyBook, Dubsado all
+confirmed unchanged) and simple anomaly/forecasting techniques (nothing
+new beyond what §5 already covers) turned up no update worth recording.
+
+- **Competitor dashboards**: GitHub Copilot's admin surface shipped an
+  **Impact Dashboard** (22 Jul 2026) that groups engaged users into
+  AI-adoption-phase cohorts — Phase 1 (code-first), Phase 2 (agent-first),
+  Phase 3 (multi-agent) — each card showing merge velocity and
+  lines-of-code-per-user-per-day, then added a **"Potential return on
+  investment" section** (7 Aug 2026) that connects Copilot spend directly to
+  PR output. That's the minware-style spend→output ROI framing (already
+  noted in §1) now shipped by the platform vendor itself rather than a
+  third party — the adoption-phase-cohort segmentation is a genuinely new
+  angle (not just "active vs. licensed") worth remembering if we ever build
+  a similar client/repo maturity view. Nothing else materially new in
+  ccusage, Cursor/minware, or Claude Code's own analytics surface this week
+  — Cursor's August changes were cloud-agent infrastructure, not
+  dashboard/billing features, and Claude Code's new "Reflect" view is an
+  individual habit-tracker, not a consultancy-billing-relevant surface.
+- **Engineering-intelligence platforms**: LinearB's 2026 Software
+  Engineering Benchmarks Report (8.1M PRs, 4,800 teams) found technical
+  debt up 30–41% following AI adoption, only 32.7% of AI-authored PRs
+  merging without modification (vs. 84.4% for human-authored PRs), and
+  review time up 91% on high-AI-adoption teams — human review, not coding,
+  is the new bottleneck. Directly relevant to this dashboard's rework-rate
+  proxy (§4): independent confirmation that "AI wrote it fast" and "it
+  shipped clean" are different claims, and that AI's time cost tends to
+  resurface downstream as review/rework rather than disappearing. A
+  separate large-scale study, "Debt Behind the AI Boom" (arXiv:2603.28592,
+  302.6k verified AI-authored commits across 6,299 repos, 5 assistants
+  including Claude and Copilot, before/after static analysis per commit),
+  found a per-tool rate of AI-authored commits introducing at least one
+  code-smell/correctness/security issue ranging roughly from the high
+  teens to high 20s in percent depending on the assistant, with 22.7% of
+  those issues still unresolved at the latest repository revision — same
+  shape of finding as the Veracode/CSA caveat already in §4, now with
+  commit-level attribution instead of a sampled snapshot.
+- **AI-coding productivity research**: METR's early-2026 follow-up
+  **reverses the sign** of the headline -19%-slower finding already cited
+  in §4 — for the subset of original developers re-tested, the estimated
+  effect flipped to a **+18% speedup** (CI -38% to +9%, still wide enough
+  to cross zero); newly recruited developers showed -4% (CI -15% to +9%).
+  METR itself frames this as inconclusive rather than a win: the intended
+  larger follow-up experiment had to be abandoned because so many
+  developers now refuse to work without AI assistance that a clean control
+  group is no longer recruitable. The actionable takeaway isn't "AI is now
+  proven faster" — it's that self-reported and even RCT-measured speed
+  effects are still an unsettled, moving target, which reinforces (doesn't
+  loosen) the existing rule in this codebase against presenting "time
+  saved" as a hard number. Separately, a Microsoft-internal field study
+  (arXiv:2607.01418, tens of thousands of engineers, first-half-2026
+  Claude Code + Copilot CLI rollout) used direct developer telemetry
+  rather than surveys and found adopters merged roughly 24% more PRs than
+  a counterfactual baseline predicted — a throughput result in the same
+  direction as the Faros AI counter-study already cited in §4, now from a
+  much larger and more directly instrumented sample.
+
+Sources: [Copilot impact dashboard](https://github.blog/changelog/2026-07-22-new-copilot-usage-metrics-impact-dashboard/), [Copilot impact dashboard ROI section](https://github.blog/changelog/2026-08-07-copilot-impact-dashboard-adds-a-return-on-investment-section/), [LinearB 2026 Benchmarks — 8M PRs](https://linearb.io/blog/8-million-prs-engineering-productivity), [LinearB — AI PRs merge at half the rate of human code](https://linearb.io/dev-interrupted/podcast/linearb-2026-benchmarks-ai-pr-merge-rate), [Debt Behind the AI Boom (arXiv:2603.28592)](https://arxiv.org/abs/2603.28592), [METR — changing our developer productivity experiment design (2026 update)](https://metr.org/blog/2026-02-24-uplift-update/), [Rob Bowley — summary of METR's 2026 update](https://blog.robbowley.net/2026/04/04/metrs-developer-productivity-research-2026-update/), [Microsoft Claude Code / Copilot CLI rollout study (arXiv:2607.01418)](https://arxiv.org/abs/2607.01418).
