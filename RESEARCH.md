@@ -264,3 +264,22 @@ new beyond what §5 already covers) turned up no update worth recording.
   much larger and more directly instrumented sample.
 
 Sources: [Copilot impact dashboard](https://github.blog/changelog/2026-07-22-new-copilot-usage-metrics-impact-dashboard/), [Copilot impact dashboard ROI section](https://github.blog/changelog/2026-08-07-copilot-impact-dashboard-adds-a-return-on-investment-section/), [LinearB 2026 Benchmarks — 8M PRs](https://linearb.io/blog/8-million-prs-engineering-productivity), [LinearB — AI PRs merge at half the rate of human code](https://linearb.io/dev-interrupted/podcast/linearb-2026-benchmarks-ai-pr-merge-rate), [Debt Behind the AI Boom (arXiv:2603.28592)](https://arxiv.org/abs/2603.28592), [METR — changing our developer productivity experiment design (2026 update)](https://metr.org/blog/2026-02-24-uplift-update/), [Rob Bowley — summary of METR's 2026 update](https://blog.robbowley.net/2026/04/04/metrs-developer-productivity-research-2026-update/), [Microsoft Claude Code / Copilot CLI rollout study (arXiv:2607.01418)](https://arxiv.org/abs/2607.01418).
+
+## Research update - 2026-09-01
+
+Monthly check against this file's last entry (2026-08-23, only 9 days prior —
+the weekly-refresh cadence had already absorbed the month's genuine news).
+Searched all six areas — competitor dashboards (GitHub Copilot, Cursor/minware,
+Sourcegraph Cody, Claude Code's own analytics surface, ccusage, Amazon Q),
+engineering-intelligence platforms (LinearB, Jellyfish, DX, Swarmia, SPACE/DORA),
+AI-coding productivity research (including a fresh check on METR, which last
+posted its self-reported-impact survey in May 2026 and a developer-productivity
+experiment-design rework in February, both already cited above), freelance
+billing tools (Bonsai, Dubsado, Ignition — still confirmed to have shipped no
+AI-specific billing feature), and anomaly/forecasting techniques — and found
+nothing that post-dates and materially updates what's already recorded above.
+Notable items surfaced were all older than 2026-08-23 and already reflected
+here: Claude Code's Artifacts-as-live-dashboards feature (shipped 18 Jun 2026,
+predates even this file's creation), and the Veracode/Cloud Security Alliance
+AI-code-vulnerability figures (April 2026, already captured by the §4 caveat).
+No commit-worthy update found this cycle beyond this note.
