@@ -283,3 +283,32 @@ here: Claude Code's Artifacts-as-live-dashboards feature (shipped 18 Jun 2026,
 predates even this file's creation), and the Veracode/Cloud Security Alliance
 AI-code-vulnerability figures (April 2026, already captured by the §4 caveat).
 No commit-worthy update found this cycle beyond this note.
+
+## Research update - 2026-09-06
+
+Weekly check against this file's last entry (2026-09-01, 5 days prior).
+Searched all six areas: competitor dashboards (GitHub Copilot's admin
+surface, Cursor, minware, Claude Code's own release notes, ccusage),
+engineering-intelligence platforms (LinearB, Jellyfish, DX, Swarmia),
+AI-coding productivity research, freelance billing tools (Bonsai, Dubsado,
+Ignition/Practice Ignition), and anomaly/forecasting techniques. Everything
+surfaced either predates 2026-09-01 and is already reflected above (GitHub
+Copilot's Code Generation Metrics Dashboard, shipped Dec 2025/GA Feb 2026;
+Ignition's Price Insights and AutoPricing, both already noted in §6; METR's
+May 2026 self-reported-impact survey and February experiment-design
+rework, both already cited) or is out of scope for this dashboard's
+billing/analytics/productivity-measurement focus (Claude Code CLI's
+September point releases were CLI ergonomics — output-size limits, org
+policy diagnostics — not analytics/billing features; Cursor's September 2
+update was self-hosted-machine/cloud-agent infrastructure, not a
+dashboard or billing feature). One candidate worth flagging as *not* newly
+relevant: a Management Science-published field-experiment paper ("The
+Effects of Generative AI on High-Skilled Work," Cui/Demirer/Jaffe/
+Musolff/Peng/Salz, across Microsoft/Accenture/a Fortune 100 manufacturer,
+~4,867 developers) reporting an average 26% productivity gain concentrated
+in junior/less-tenured developers with senior developers showing little
+or no measurable speedup — directly relevant to §4's productivity-pitfalls
+discussion, but the underlying working paper has circulated on SSRN since
+2024/2025, so this is a journal-publication milestone rather than a new
+finding; noted here in case a future refresh finds it got a fresh, truly
+new follow-up. No commit-worthy update found this cycle beyond this note.
