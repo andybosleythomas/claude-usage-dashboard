@@ -265,6 +265,35 @@ new beyond what §5 already covers) turned up no update worth recording.
 
 Sources: [Copilot impact dashboard](https://github.blog/changelog/2026-07-22-new-copilot-usage-metrics-impact-dashboard/), [Copilot impact dashboard ROI section](https://github.blog/changelog/2026-08-07-copilot-impact-dashboard-adds-a-return-on-investment-section/), [LinearB 2026 Benchmarks — 8M PRs](https://linearb.io/blog/8-million-prs-engineering-productivity), [LinearB — AI PRs merge at half the rate of human code](https://linearb.io/dev-interrupted/podcast/linearb-2026-benchmarks-ai-pr-merge-rate), [Debt Behind the AI Boom (arXiv:2603.28592)](https://arxiv.org/abs/2603.28592), [METR — changing our developer productivity experiment design (2026 update)](https://metr.org/blog/2026-02-24-uplift-update/), [Rob Bowley — summary of METR's 2026 update](https://blog.robbowley.net/2026/04/04/metrs-developer-productivity-research-2026-update/), [Microsoft Claude Code / Copilot CLI rollout study (arXiv:2607.01418)](https://arxiv.org/abs/2607.01418).
 
+## Research update - 2026-09-13
+
+Weekly check against this file's last entry (2026-09-06, 7 days prior). Searched
+all six areas: competitor dashboards (GitHub Copilot's admin/enterprise
+surface, Cursor, minware, Sourcegraph Cody, Amazon Q Developer, Claude Code's
+own analytics surface, ccusage), engineering-intelligence platforms (LinearB,
+Jellyfish, DX, Swarmia, DORA), AI-coding productivity research, freelance
+billing tools (Bonsai, Dubsado, Ignition/Practice Ignition), and
+anomaly/forecasting techniques. Nothing found post-dates and materially
+updates what's already recorded above. Two items surfaced that looked
+promising on first read but turned out to be older than they appeared: the
+NBER working paper ["Writing Code vs. Shipping
+Code"](https://www.nber.org/papers/w35275) (Demirer/Musolff/Yang; 100k+
+GitHub developers across three tool generations; +180% code generation vs.
++36% production releases — a "weak-link"/bottleneck-moves-downstream finding
+distinct from the Cui et al. paper already noted in the 2026-09-06 entry) is
+dated May 2026, and Faros AI's ["Acceleration
+Whiplash"](https://www.faros.ai/research/ai-acceleration-whiplash) report
+(22,000 developers, median code review time +441.5% vs. +33.7% task
+throughput) is dated April 2026 — both predate this file's tracking window
+and would already have been in scope for earlier refreshes, so neither is
+recorded as a new finding here. Cursor shipped "Projects" (10 Sep 2026,
+longer-horizon multi-agent delegation) but this is an agent-workflow feature,
+not a dashboard/billing/analytics surface, so out of scope. GitHub Copilot's
+Code generation Metrics Dashboard reaching public preview is dated December
+2025, older than this file itself. Freelance billing tools (Bonsai, Dubsado)
+remain confirmed to have shipped no AI-specific billing feature. No
+commit-worthy update found this cycle beyond this note.
+
 ## Research update - 2026-09-01
 
 Monthly check against this file's last entry (2026-08-23, only 9 days prior —
