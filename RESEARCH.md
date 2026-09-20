@@ -265,6 +265,61 @@ new beyond what §5 already covers) turned up no update worth recording.
 
 Sources: [Copilot impact dashboard](https://github.blog/changelog/2026-07-22-new-copilot-usage-metrics-impact-dashboard/), [Copilot impact dashboard ROI section](https://github.blog/changelog/2026-08-07-copilot-impact-dashboard-adds-a-return-on-investment-section/), [LinearB 2026 Benchmarks — 8M PRs](https://linearb.io/blog/8-million-prs-engineering-productivity), [LinearB — AI PRs merge at half the rate of human code](https://linearb.io/dev-interrupted/podcast/linearb-2026-benchmarks-ai-pr-merge-rate), [Debt Behind the AI Boom (arXiv:2603.28592)](https://arxiv.org/abs/2603.28592), [METR — changing our developer productivity experiment design (2026 update)](https://metr.org/blog/2026-02-24-uplift-update/), [Rob Bowley — summary of METR's 2026 update](https://blog.robbowley.net/2026/04/04/metrs-developer-productivity-research-2026-update/), [Microsoft Claude Code / Copilot CLI rollout study (arXiv:2607.01418)](https://arxiv.org/abs/2607.01418).
 
+## Research update - 2026-09-20
+
+Weekly check against this file's last entry (2026-09-13, 7 days prior). Searched
+all six areas: competitor dashboards (GitHub Copilot's admin surface, Cursor,
+minware, Sourcegraph Cody, Amazon Q Developer, Claude Code's own release
+notes, ccusage), engineering-intelligence platforms (LinearB, Jellyfish, DX,
+Swarmia), AI-coding productivity research, freelance billing tools (Bonsai,
+Dubsado, Ignition/Practice Ignition), and anomaly/forecasting techniques.
+
+- **Competitor dashboards**: GitHub's Copilot impact dashboard shipped a
+  **feature-engagement breakdown** (17 Sep 2026, 4 days before this check) —
+  for each 28-day reporting window it now shows how many active users
+  engaged with each individual Copilot surface (code completion, agent
+  edit, passive/active code review, cloud agent, CLI, app) on at least two
+  days, so admins can see which specific features are sticking vs. which
+  need enablement push, not just aggregate seat activation. The
+  enterprise/org report APIs got the same breakdown plus a rolling-28-day
+  population fix to the adoption-phase reporting already noted in the
+  2026-08-23 entry. This is a genuinely new segmentation axis (per-feature
+  engagement, not just per-user) worth remembering alongside that entry's
+  adoption-phase-cohort note if a future per-tool-capability breakdown gets
+  built here (this dashboard already has a comparable angle via
+  `ToolUsage`/tool-call taxonomy). Nothing else new this week: Cursor,
+  minware, Sourcegraph Cody, Amazon Q Developer, Claude Code's own release
+  notes (auto-mode classifier billing change, AGENTS.md support — CLI
+  ergonomics, not analytics/billing), and ccusage all turned up only
+  comparison/explainer content or non-dashboard changes.
+- **Engineering-intelligence platforms**: LinearB's 8.1M-PR 2026 Benchmarks
+  report (already cited 2026-08-23) is still circulating with additional
+  cut stats — "AI PRs wait 4.6–5.25x longer for review pickup," "1.7x more
+  issues per PR" — but these are the same underlying dataset/report already
+  recorded here, not a new report or a new finding; not re-cited as new.
+  No new report from Jellyfish, DX, or Swarmia this week.
+- **AI-coding productivity research**: no new study. The widely-recirculated
+  "93% AI adoption, only ~10% productivity gain" framing traces to DX
+  Research's ~135,000-developer study, published 28 Apr 2026 — predates
+  this file's tracking window and is a rehash of ground already covered by
+  the Cui et al. (Microsoft/Accenture, junior-vs-senior split) and
+  Microsoft Claude Code/Copilot CLI rollout papers already cited in the
+  2026-09-06 and 2026-08-23 entries.
+- **Freelance billing tools**: Bonsai, Dubsado, Ignition/Practice Ignition
+  confirmed still shipped no AI-specific billing feature.
+- **Anomaly/forecasting techniques**: AWS shipped a **Detected Anomalies
+  widget** for Billing and Cost Management Dashboards (15 Sep 2026) —
+  surfaces anomaly count and total $ impact relative to month-to-date
+  spend, filterable by severity/service/account, with per-anomaly root
+  cause and duration. It's a presentation layer on top of the same AWS
+  Cost Anomaly Detection service already cited in §5, not a new detection
+  technique, so not implemented — but the "anomaly count + $ impact vs.
+  MTD spend, with per-anomaly duration" framing is a reasonable future
+  presentation upgrade for this dashboard's existing z-score flag if that
+  UI ever gets its own dedicated view (currently just an inline flag).
+
+Sources: [Copilot impact dashboard — feature engagement](https://github.blog/changelog/2026-09-17-copilot-impact-dashboard-now-shows-feature-engagement/), [LinearB 2026 Benchmarks — AI in software development](https://linearb.io/library/ai-in-software-development), [DX — AI productivity gains: more modest than expected](https://getdx.com/blog/ai-productivity-gains-more-modest-than-expected/), [AWS — Detected Anomalies widget for BCM Dashboards](https://aws.amazon.com/about-aws/whats-new/2026/09/monitor-detected-anomalies-using-dashboards/).
+
 ## Research update - 2026-09-13
 
 Weekly check against this file's last entry (2026-09-06, 7 days prior). Searched
