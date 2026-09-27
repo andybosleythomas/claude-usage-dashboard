@@ -396,3 +396,50 @@ discussion, but the underlying working paper has circulated on SSRN since
 2024/2025, so this is a journal-publication milestone rather than a new
 finding; noted here in case a future refresh finds it got a fresh, truly
 new follow-up. No commit-worthy update found this cycle beyond this note.
+
+## Research update - 2026-09-27
+
+Weekly check against this file's last entry (2026-09-20, 7 days prior). Searched
+all five areas: competitor dashboards (GitHub Copilot's admin surface, Cursor,
+minware, Sourcegraph Cody, Amazon Q Developer, Claude Code's own release
+notes, ccusage), engineering-intelligence platforms (LinearB, Jellyfish, DX,
+Swarmia, DORA), AI-coding productivity research, freelance billing tools
+(Bonsai, Dubsado, Ignition/Practice Ignition), and simple anomaly/forecasting
+techniques. Nothing found post-dates and materially updates what's already
+recorded above.
+
+- **Competitor dashboards**: Cursor shipped [Rollouts and Security
+  Review](https://cursor.com/blog/rollouts-and-security-reviewer) bots
+  (23 Sep 2026, enabled from its Teams/Enterprise dashboard) — per-environment
+  deploy-health monitoring and per-PR exploit scanning. Out of scope here the
+  same way prior entries excluded Cursor's cloud-agent infrastructure
+  changes: neither is a cost/usage/billing analytics surface. GitHub
+  Copilot's impact dashboard had no update this week beyond the 17 Sep
+  feature-engagement breakdown already recorded in the last entry. [Amazon Q
+  Developer is being wound down](https://aws.amazon.com/blogs/devops/amazon-q-developer-end-of-support-announcement/)
+  in favor of AWS's new "Kiro" IDE, but that announcement dates to 30 Apr
+  2026 — well outside this file's tracking window, not a new development.
+  Sourcegraph Cody, minware, and ccusage turned up no changes this week.
+- **Engineering-intelligence platforms**: no new report from LinearB,
+  Jellyfish, DX, or Swarmia this week. DORA's [ROI of AI-assisted Software
+  Development report](https://dora.dev/ai/roi/report/) (a J-curve
+  value-realization model, with code review framed as the critical
+  value-capture stage) looked promising on first read but is dated
+  2026.01/early-to-mid 2026 — predates this file's tracking window, so not
+  recorded as new.
+- **AI-coding productivity research**: a [126-study systematic
+  review](https://reinvently.co.uk/blog/ai-coding-productivity-evidence/)
+  (coding-stage gains ~20-30%, release-output gains only 10-30%,
+  "agent-native" delivery cases reporting a 4.5x median/18x task-specific
+  upside) was updated 17 Sep 2026, but was originally published 28 Jul 2026
+  and is a synthesis of studies already reflected in this file's earlier
+  entries (Cui et al., Faros AI, the Microsoft Claude Code/Copilot CLI
+  rollout paper) rather than new primary evidence — not recorded as new.
+- **Freelance billing tools**: Bonsai, Dubsado, Ignition/Practice Ignition
+  confirmed still shipped no AI-specific billing feature (Bonsai was
+  acquired by Zoom in Dec 2025; no AI-billing feature has followed from
+  that).
+- **Anomaly/forecasting techniques**: no new simple, SQL-dashboard-suitable
+  technique found beyond what §5 already covers.
+
+No commit-worthy update found this cycle beyond this note.
