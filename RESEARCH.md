@@ -443,3 +443,56 @@ recorded above.
   technique found beyond what §5 already covers.
 
 No commit-worthy update found this cycle beyond this note.
+
+## Research update - 2026-10-01
+
+Monthly check against this file's last entry (2026-09-27, 4 days prior) — took a
+broader/deeper pass than the weekly cadence, searching back past the prior
+entry for month-over-month trend pieces and quarterly/benchmark reports in
+addition to individual news items, across all six areas: competitor
+dashboards (GitHub Copilot, Cursor, minware, Sourcegraph Cody, Claude Code's
+own analytics, ccusage), engineering-intelligence platforms (LinearB,
+Jellyfish, DX, Swarmia, DORA), AI-coding productivity research (including a
+fresh McKinsey check), freelance billing tools (Bonsai, Dubsado,
+Ignition/Practice Ignition), and anomaly/forecasting techniques. Nothing
+found both post-dates this file's tracking window and materially updates
+what's already recorded above; several items looked promising on first pass
+but turned out to be older or unsubstantiated on closer check:
+
+- **Competitor dashboards**: Sourcegraph Analytics' User Cohorts Explorer
+  (per-user credit consumption + custom saved cohorts) looked like a new
+  Cody-adjacent feature, but it shipped 9 Jul 2026 — well before this file's
+  own creation, not a new development. Cursor's 23 Sep 2026 token-efficiency
+  work (46.9% token reduction on MCP-calling agent sessions) and Rollouts/
+  Security Review bots were already recorded in the 2026-09-27 entry. Claude
+  Code's own analytics dashboard and ccusage turned up only incremental
+  version bumps, no new dashboard/billing-relevant feature.
+- **Engineering-intelligence platforms**: no new report from LinearB,
+  Jellyfish, DX, or Swarmia this cycle beyond what's already cited.
+- **AI-coding productivity research**: a figure circulating across several
+  SEO/content-farm blogs ("McKinsey, 4,500 developers across 150
+  enterprises, AI cuts routine-task time 46% but <10% on high-complexity
+  work") does not trace to any actual McKinsey publication — a direct check
+  of mckinsey.com's own 2026 output (the April 2026 "AI revolution in
+  software development" report, ~300 public companies, 16–30% productivity
+  gains in the top quintile; the September 2026 "Technology Trends Outlook
+  2026," which repeats the NBER-style +180%-coding-activity-vs-+30%-shipped
+  finding already cited in the 2026-09-13 entry and adds that 46% of
+  developers worldwide distrust AI-tool output accuracy vs. 33% who trust
+  it; and the August 2026 "State of AI" survey) shows no 4,500-developer/46%
+  study. Flagging this here so a future refresh doesn't re-discover and cite
+  it as real without the same check — it appears to be fabricated/
+  misattributed content, not a genuine new finding.
+- **Freelance billing tools**: Bonsai (now under Zoom, per the 2026-09-27
+  entry), Dubsado, and Ignition/Practice Ignition confirmed still shipped no
+  AI-specific *billing* feature. Ignition does have an MCP server letting an
+  AI assistant (Claude, ChatGPT) interact with a firm's Ignition account
+  directly, live since ~20 Aug 2026 — but that's AI-assistant tooling access,
+  not a billing-feature change (no AI-work line item, no AI-usage rate card),
+  and it predates this file's tracking window regardless.
+- **Anomaly/forecasting techniques**: nothing new beyond what §5 already
+  covers — GCP's ML-based cost anomaly detection (the one unfamiliar item
+  that surfaced) dates to its original Google Cloud Next '24 launch, not a
+  2026 development.
+
+Sources: [Sourcegraph — User cohort explorer and new date range options](https://sourcegraph.com/changelog/user-credits-cohort-analytics), [McKinsey — The AI revolution in software development (Apr 2026)](https://www.mckinsey.com/~/media/mckinsey/business%20functions/tech%20and%20ai/our%20insights/the%20ai%20revolution%20in%20software%20development/the-ai-revolution-in-software-development_final.pdf), [McKinsey — Technology Trends Outlook 2026 (Sep 2026)](https://www.mckinsey.com/~/media/mckinsey/business%20functions/mckinsey%20digital/our%20insights/the%20top%20trends%20in%20tech%202026/mckinsey%20technology%20trends%20outlook%202026.pdf), [McKinsey — The state of AI in 2026: On the road to ROI (Aug 2026)](https://www.mckinsey.com/~/media/mckinsey/business%20functions/quantumblack/our%20insights/the%20state%20of%20ai/the-state-of-ai-in-2026-on-the-road-to-roi.pdf), [Ignition — Using the Ignition MCP with your AI assistant](https://support.ignitionapp.com/en/articles/15516480-using-the-ignition-mcp-with-your-ai-assistant), [Google Cloud — Introducing Cost Anomaly Detection](https://cloud.google.com/blog/topics/cost-management/introducing-cost-anomaly-detection/).
