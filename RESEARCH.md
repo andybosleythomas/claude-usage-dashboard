@@ -496,3 +496,34 @@ but turned out to be older or unsubstantiated on closer check:
   2026 development.
 
 Sources: [Sourcegraph — User cohort explorer and new date range options](https://sourcegraph.com/changelog/user-credits-cohort-analytics), [McKinsey — The AI revolution in software development (Apr 2026)](https://www.mckinsey.com/~/media/mckinsey/business%20functions/tech%20and%20ai/our%20insights/the%20ai%20revolution%20in%20software%20development/the-ai-revolution-in-software-development_final.pdf), [McKinsey — Technology Trends Outlook 2026 (Sep 2026)](https://www.mckinsey.com/~/media/mckinsey/business%20functions/mckinsey%20digital/our%20insights/the%20top%20trends%20in%20tech%202026/mckinsey%20technology%20trends%20outlook%202026.pdf), [McKinsey — The state of AI in 2026: On the road to ROI (Aug 2026)](https://www.mckinsey.com/~/media/mckinsey/business%20functions/quantumblack/our%20insights/the%20state%20of%20ai/the-state-of-ai-in-2026-on-the-road-to-roi.pdf), [Ignition — Using the Ignition MCP with your AI assistant](https://support.ignitionapp.com/en/articles/15516480-using-the-ignition-mcp-with-your-ai-assistant), [Google Cloud — Introducing Cost Anomaly Detection](https://cloud.google.com/blog/topics/cost-management/introducing-cost-anomaly-detection/).
+
+## Research update - 2026-10-04
+
+Weekly check against this file's last entry (2026-10-01, 3 days prior). Searched
+all five areas: competitor dashboards (GitHub Copilot, Cursor, minware,
+Sourcegraph Cody, Claude Code's own analytics/changelog, ccusage), engineering-
+intelligence platforms (LinearB, Jellyfish, DX, Swarmia), AI-coding productivity
+research, freelance billing tools (Bonsai, Dubsado, Ignition/Practice Ignition),
+and simple anomaly/forecasting techniques. Nothing found both post-dates this
+file's tracking window and materially updates what's already recorded above.
+Two items looked promising on first pass but turned out to be older than they
+appeared: Jellyfish's ["State of AI in Software Engineering,
+H1 2026"](https://jellyfish.co/resources/state-of-ai-in-software-engineering-report/)
+report ("exploding spend, diverging returns" — 16x spend growth, a power-user
+tail now rivaling a junior engineer's salary, top-10% engineers ~2x as
+productive as the median but at ~10x the token spend) is genuinely relevant to
+this dashboard's cost/ROI framing, but its research briefing dates to 5 Aug
+2026 — well before this file's own 2026-08-23 entry, just not previously
+surfaced by earlier refreshes; and LeadDev's ["AI Impact Report
+2026"](https://leaddev.com/the-ai-impact-report-2026/) (591 engineering
+leaders; 70% adoption, 26% report major productivity gains but only 31%
+measure them, 57% call token-usage metrics ineffective) had its full release
+in late August 2026, also predating this file's tracking window. Cortex.io's
+Copilot-integrated "AI Impact Dashboard" similarly turned out to date to
+October 2025, over a year before this check. Competitor dashboards (GitHub
+Copilot's feature-engagement breakdown remains the latest change, already
+recorded 2026-09-17/09-20; Cursor, Sourcegraph Cody, ccusage, and Claude
+Code's own changelog show only routine point releases this week) and
+freelance billing tools (Bonsai, Dubsado, Ignition/Practice Ignition confirmed
+still shipped no AI-specific billing feature) turned up nothing new either.
+No commit-worthy update found this cycle beyond this note.
