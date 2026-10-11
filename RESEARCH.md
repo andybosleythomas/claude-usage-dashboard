@@ -527,3 +527,26 @@ Code's own changelog show only routine point releases this week) and
 freelance billing tools (Bonsai, Dubsado, Ignition/Practice Ignition confirmed
 still shipped no AI-specific billing feature) turned up nothing new either.
 No commit-worthy update found this cycle beyond this note.
+
+## Research update - 2026-10-11
+
+Weekly check against this file's last entry (2026-10-04, 7 days prior). Searched
+all five areas: competitor dashboards ([GitHub Copilot's impact
+dashboard](https://github.blog/changelog/2026-09-17-copilot-impact-dashboard-now-shows-feature-engagement/),
+Cursor, minware, Sourcegraph Cody, Claude Code's own analytics surface,
+ccusage), engineering-intelligence platforms (LinearB, Jellyfish, DX,
+Swarmia, DORA), AI-coding productivity research (including a fresh METR
+check), freelance billing tools (Bonsai, Dubsado, Ignition/Practice
+Ignition), and simple anomaly/forecasting techniques. Nothing found this
+cycle post-dates this file's tracking window and materially updates what's
+already recorded above — every candidate was either already cited here, or
+turned out to predate 2026-10-04 on closer inspection (e.g. Jellyfish's own
+newsroom update this week is a user/PR-volume press release, not a new
+survey or methodology; [Sourcegraph Cody's most recent change is a July 2026
+pricing-plan removal](https://costbench.com/changelog/sourcegraph-cody-plan-removed-2026-07/);
+DORA's AI-ROI report errata is still dated its original April 2026 update).
+METR has posted no update since its [February/March 2026 experiment-design
+rework](https://metr.org/blog/2026-02-24-uplift-update/) already cited in
+the 2026-08-23 entry. Freelance billing tools (Bonsai, Dubsado,
+Ignition/Practice Ignition) confirmed still shipped no AI-specific billing
+feature. No commit-worthy update found this cycle beyond this note.
