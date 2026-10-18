@@ -550,3 +550,38 @@ rework](https://metr.org/blog/2026-02-24-uplift-update/) already cited in
 the 2026-08-23 entry. Freelance billing tools (Bonsai, Dubsado,
 Ignition/Practice Ignition) confirmed still shipped no AI-specific billing
 feature. No commit-worthy update found this cycle beyond this note.
+
+## Research update - 2026-10-18
+
+Weekly check against this file's last entry (2026-10-11, 7 days prior). Searched
+all five areas: competitor dashboards (GitHub Copilot's admin surface, Cursor,
+minware, Sourcegraph Cody, Claude Code's own analytics surface, ccusage),
+engineering-intelligence platforms (LinearB, Jellyfish, DX, Swarmia),
+AI-coding productivity research (including a fresh METR check), freelance
+billing tools (Bonsai, Dubsado, Ignition/Practice Ignition), and simple
+anomaly/forecasting techniques. Nothing found this cycle post-dates this
+file's tracking window and materially updates what's already recorded above.
+
+One item looked promising on first read but turned out to be out of scope:
+Anthropic launched a general **"Claude Dashboards"** beta (8 Oct 2026) that
+builds a live dashboard from a plain-language question against a connected
+data warehouse (Redshift, BigQuery, ClickHouse, Databricks, Snowflake). It's
+a Claude-the-product BI feature, not a Claude Code coding-assistant
+analytics/billing surface (same exclusion basis as prior entries' CLI
+ergonomics items), so not recorded as a competitor-dashboard update. GitHub
+Copilot's impact dashboard had no change this week beyond the
+feature-engagement breakdown already cited in the 2026-09-17/09-20 entries;
+a couple of third-party trackers claimed an October model-retirement
+changelog entry but gave conflicting dates (2 Oct vs. 19 Oct) and neither
+is a dashboard/billing feature regardless. Cursor, minware, Sourcegraph
+Cody, and ccusage turned up no changes this week. No new report from
+LinearB, Jellyfish, DX, or Swarmia. METR has posted no update since its
+February/March 2026 experiment-design rework already cited. Freelance
+billing tools (Bonsai, Dubsado, Ignition/Practice Ignition) confirmed still
+shipped no AI-specific billing feature. On anomaly/forecasting techniques,
+the only new-looking items (Snowflake's per-team anomaly-monitor scopes,
+Databricks' rolling-14-day z-score system-table query, an Oracle
+Autonomous-DB EM-model approach) either predate this file's tracking window,
+restate the same z-score design already in §5, or require a full
+unsupervised-ML pipeline unsuited to a simple SQL-backed dashboard — none
+recorded as new. No commit-worthy update found this cycle beyond this note.
