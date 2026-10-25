@@ -585,3 +585,45 @@ Autonomous-DB EM-model approach) either predate this file's tracking window,
 restate the same z-score design already in §5, or require a full
 unsupervised-ML pipeline unsuited to a simple SQL-backed dashboard — none
 recorded as new. No commit-worthy update found this cycle beyond this note.
+
+## Research update - 2026-10-25
+
+Weekly check against this file's last entry (2026-10-18, 7 days prior). Searched
+all five areas: competitor dashboards (GitHub Copilot's admin surface, Cursor,
+minware, Sourcegraph Cody, Claude Code's own analytics surface, ccusage),
+engineering-intelligence platforms (LinearB, Jellyfish, DX, Swarmia),
+AI-coding productivity research, freelance billing tools (Bonsai, Dubsado,
+Ignition/Practice Ignition), and simple anomaly/forecasting techniques.
+Nothing found this cycle post-dates this file's tracking window and
+materially updates what's already recorded above.
+
+GitHub Copilot's impact dashboard, Cursor, minware, Sourcegraph Cody, and
+ccusage turned up no changes dated after 18 Oct 2026 — the Sept 14/17
+feature-engagement breakdown already cited remains the latest change.
+No new report from LinearB, Jellyfish, DX, or Swarmia this week. Two
+productivity-research items looked promising but couldn't be confirmed as
+new: a paper titled "Fragmented Markers, Mixed Results" referenced in
+connection with ASE 2026 (12-16 Oct 2026, Munich) couldn't be located or
+dated precisely enough to cite with confidence, and a Stanford talk by Yegor
+Denisov-Blanch ("Does AI Actually Boost Developer Productivity?", ~100k
+developers across 600+ companies, reporting a ~15-20% net productivity gain
+after rework/bug-fix costs are netted out of a 30-40% raw/apparent gain, with
+greenfield work showing the strongest effect and high-complexity brownfield
+work showing 0-10% or worse) has circulated since at least early September
+2026 per secondary coverage, predating this file's tracking window and
+already in the same shape as the Cui et al./Faros AI/Microsoft rollout
+findings already cited in §4 — not recorded as a new primary finding, but
+flagged here in case a future refresh finds its primary source/publication
+date and it turns out to be newer than currently believed. Freelance billing
+tools (Bonsai, Dubsado, Ignition/Practice Ignition) confirmed still shipped
+no AI-coding-specific billing feature — Ignition's 9 Sep 2026 "billing,
+payment, and recovery" release is general accounting-firm billing
+automation, not an AI-coding-usage billing feature, and predates this file's
+tracking window regardless. On anomaly/forecasting techniques, Snowflake's
+preview-stage anomaly monitors (tag/service-scoped, with an
+hourly-consumption-by-service-type breakdown added March 2026) and a BMW
+Prophet-based seasonality forecast are the only items found, both
+Snowflake/ML-pipeline-shaped rather than suited to this dashboard's simple
+SQL z-score approach — not implemented, consistent with prior entries'
+treatment of ML-based anomaly detection as out of scope. No commit-worthy
+update found this cycle beyond this note.
