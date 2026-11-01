@@ -691,3 +691,23 @@ simple anomaly/forecasting techniques.
 
 No other commit-worthy update found this cycle beyond the Harvard/Jellyfish
 finding above.
+
+## Research update - 2026-11-01 (weekly)
+
+Weekly check landing the same calendar day as this file's own monthly refresh
+above (committed hours earlier, which already searched all six areas back to
+2026-10-25). Re-searched competitor dashboards (GitHub Copilot, Cursor,
+minware, Claude Code's own analytics, ccusage), engineering-intelligence
+platforms (LinearB, Jellyfish, DX, Swarmia), AI-coding productivity research,
+and freelance billing tools (Bonsai, HoneyBook, Dubsado, Ignition/Practice
+Ignition) for anything dated after that pass. Nothing new: GitHub Copilot's
+impact dashboard, Cursor, minware, and ccusage show no changes past the items
+already recorded above; no new LinearB/Jellyfish/DX/Swarmia report; the only
+productivity-research item surfacing again is the still-unconfirmed Stanford
+Denisov-Blanch 100k-developer study already flagged in the 2026-10-25 entry
+(a conflicting "~7-9%" figure turned up this time vs. that entry's
+"~15-20% net," underscoring it's not yet reliable enough to cite as a
+number); and Bonsai/HoneyBook/Dubsado/Ignition confirmed still shipped no
+AI-coding-specific billing feature (HoneyBook's and Bonsai's general AI
+writing/meeting-prep assistants are not AI-usage billing features). No
+commit-worthy update found this cycle beyond this note.
