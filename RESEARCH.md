@@ -627,3 +627,67 @@ Snowflake/ML-pipeline-shaped rather than suited to this dashboard's simple
 SQL z-score approach — not implemented, consistent with prior entries'
 treatment of ML-based anomaly detection as out of scope. No commit-worthy
 update found this cycle beyond this note.
+
+## Research update - 2026-11-01
+
+Monthly check against this file's last entry (2026-10-25, 7 days prior) — took
+a broader/deeper pass than the weekly cadence, searching back for
+month-over-month trend pieces and quarterly/annual reports in addition to
+individual news items, across all six areas: competitor dashboards (GitHub
+Copilot, Cursor, minware, Sourcegraph Cody, Claude Code's own analytics,
+ccusage), engineering-intelligence platforms (LinearB, Jellyfish, DX,
+Swarmia, SPACE/DORA), AI-coding productivity research, freelance billing
+tools (Bonsai, HoneyBook, Dubsado, Ignition/Practice Ignition, AND.co), and
+simple anomaly/forecasting techniques.
+
+- **AI-coding productivity research — the most substantive find this
+  cycle.** A Harvard Economics study using Jellyfish's engineering-analytics
+  data (reported across ~718 firms, covered by
+  [InfoQ](https://www.infoq.com/news/2026/10/jellyfish-ai-productivity/),
+  [Jellyfish's own research writeup](https://jellyfish.co/blog/harvard-jellyfish-ai-is-making-developers-faster/),
+  and [SD Times](https://sdtimes.com/ai/report-ai-productivity-gains-cancelled-out-by-friction-points-in-other-areas-that-slow-developers-down/))
+  found AI coding **assistants** raised lines-of-code ~12% and commits ~9%
+  with no measurable lift in resolved issues, while AI coding **agents**
+  raised code volume ~30% and did lift resolved issues, by ~12% — but in
+  both cases the gain is substantially absorbed downstream: PR review time
+  rose ~49%, the share of PRs requiring revision roughly doubled, and
+  comments-per-PR rose ~35%. This is a materially larger/fresher dataset
+  than the LinearB 8.1M-PR study already cited in the 2026-08-23 entry, but
+  reaches the same structural conclusion — code review, not code
+  generation, is the bottleneck AI shifts work to — which is exactly the
+  framing this dashboard's rework-rate/tool-taxonomy proxies (§4) were
+  built around. Treat the "718 firms" figure and any attribution of the
+  underlying working paper to specific named authors with some caution:
+  this session's network access couldn't reach jellyfish.co or sdtimes.com
+  directly to verify the primary writeup, so the figures above are
+  triangulated across secondary coverage rather than confirmed against
+  Jellyfish's own post.
+- **Competitor dashboards / industry backdrop**: GitHub's own
+  [Octoverse 2026 report](https://github.blog/news-insights/octoverse/octoverse-commits-pushes-reach-new-highs-in-2026-as-developers-build-with-agents/)
+  (28 Oct 2026, GitHub Universe) isn't a dashboard/billing feature, but is
+  worth noting as backdrop: commits up ~6x, merged PRs up ~3.9x
+  year-over-year (220M merged PRs/month), both inflecting sharply after
+  June 2026 — GitHub attributes this to agentic coding. A widely-repeated
+  "AI agents now open 40%+ of GitHub PRs" figure, attributed to Satya
+  Nadella's Universe keynote via secondary coverage rather than GitHub's
+  own post, conflicts with at least one independent third-party estimate
+  (~27.6%) — not reliable enough to cite as a number, but the underlying
+  trend (explosive agent-driven PR growth in H2 2026) is corroborated by
+  GitHub's own commit/push/merge figures above. No new feature shipped by
+  GitHub Copilot's impact dashboard, Cursor, minware, Sourcegraph Cody, or
+  ccusage beyond what's already recorded (the Sept 2026 feature-engagement
+  breakdown remains the latest Copilot change; Cursor's October pricing-tier
+  overhaul is a packaging change, not an analytics/billing feature, same
+  exclusion basis as prior entries).
+- **Engineering-intelligence platforms**: beyond the Harvard/Jellyfish study
+  above, no new report from LinearB, DX, or Swarmia found this cycle that
+  post-dates 2026-10-25 and adds a materially new metric or finding.
+- **Freelance billing tools**: Bonsai, HoneyBook, Dubsado, and
+  Ignition/Practice Ignition confirmed still shipped no AI-coding-specific
+  billing feature (no AI-work line item, no AI-usage rate card) — unchanged
+  from every prior check in this file.
+- **Anomaly/forecasting techniques**: nothing new beyond what §5 and prior
+  entries already cover.
+
+No other commit-worthy update found this cycle beyond the Harvard/Jellyfish
+finding above.
