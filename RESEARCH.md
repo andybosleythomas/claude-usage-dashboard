@@ -711,3 +711,70 @@ number); and Bonsai/HoneyBook/Dubsado/Ignition confirmed still shipped no
 AI-coding-specific billing feature (HoneyBook's and Bonsai's general AI
 writing/meeting-prep assistants are not AI-usage billing features). No
 commit-worthy update found this cycle beyond this note.
+
+## Research update - 2026-11-08
+
+Weekly check against this file's last entry (2026-11-01, 7 days prior). Searched
+all five areas: competitor dashboards (GitHub Copilot's admin surface, Cursor,
+minware, Sourcegraph Cody, Claude Code's own analytics/changelog, ccusage),
+engineering-intelligence platforms (LinearB, Jellyfish, DX, Swarmia, DORA),
+AI-coding productivity research, freelance billing tools (Bonsai, HoneyBook,
+Dubsado, Ignition/Practice Ignition), and simple anomaly/forecasting
+techniques.
+
+- **Competitor dashboards — two items, one newly-shipped, one previously
+  missed.** GitHub's Copilot impact dashboard shipped an **"Industry
+  comparison" section** ([github.blog changelog, 22 Oct
+  2026](https://github.blog/changelog/2026-10-22-industry-comparisons-in-the-copilot-impact-dashboard)):
+  enterprises/orgs opt in, pick a company-size band (e.g. 1–999, 1,000–4,999,
+  5,000+) and one of ten industries, and see their agentic-adoption numbers
+  benchmarked against an aggregated, anonymized peer cohort (widened to "all
+  industries" if their own peer group is too small); comparisons refresh
+  daily, aggregates are deleted after 30 days, and the feature is
+  dashboard-only (not in the usage-metrics API or NDJSON exports). This
+  predates this file's 2026-10-25 and 2026-11-01 entries' own search windows
+  but wasn't caught by either — same situation as the Jellyfish report
+  flagged late in the 2026-10-04 entry — so it's recorded now rather than
+  skipped: it's a genuinely new segmentation axis (peer-cohort benchmarking
+  by size+industry) alongside the adoption-phase-cohort and
+  per-feature-engagement axes already noted in the 2026-08-23/2026-09-20
+  entries, worth remembering if a client/repo "how does your AI usage
+  compare" framing ever gets built here. Separately, third-party release
+  trackers (not Anthropic's own changelog, which this session's network
+  access couldn't reach directly) report **Claude Code v2.1.317** (2 Nov
+  2026) added a **gateway admin cost-reporting API** —
+  `GET /v1/organizations/analytics/cost`, breaking down historical spend by
+  total, per-developer, per-day, or per-IdP-group
+  ([ai-tldr.dev](https://ai-tldr.dev/releases/anthropic-claude-code-2-1-317/),
+  [havoptic.com](https://www.havoptic.com/r/claude-code-2.1.317)) — directly
+  relevant to §1's note on Claude Code's own analytics dashboard, though
+  flagged here with lower confidence than usual since it's sourced from
+  secondary trackers rather than Anthropic's own release notes.
+- **Engineering-intelligence platforms**: no new report from LinearB,
+  Jellyfish, DX, or Swarmia this cycle beyond the Harvard/Jellyfish study
+  already cited 2026-11-01. A claim that DORA had announced it would skip a
+  2026 "State of AI-assisted Software Development" report could not be
+  confirmed — dora.dev's own pages still reference a 2026 "ROI of
+  AI-assisted Software Development" report (already noted as out-of-window
+  in the 2026-09-27 entry) — so not recorded as a finding.
+- **AI-coding productivity research**: nothing new. The widely-recirculated
+  "741% more code, only 20% more releases" figure traces to the same NBER
+  working paper (Demirer/Musolff/Yang) already cited in the 2026-09-13 entry
+  as "+180% code generation vs. +36% production releases" — same paper,
+  different granular cut (by tool-generation vs. by sync/async-agent type),
+  not a new study. A University of Chicago/Cursor-sponsored study ("39% more
+  PRs merged" after agent adoption, 24 orgs vs. 8) is dated January 2026 —
+  predates this file's entire tracking window, not new. Faros AI's "98% more
+  PRs, 91% longer review time" figure traces to its "AI Productivity Paradox
+  Report 2025," also out of window.
+- **Freelance billing tools**: Bonsai, HoneyBook, Dubsado, and
+  Ignition/Practice Ignition confirmed still shipped no AI-coding-specific
+  billing feature — unchanged from every prior check in this file.
+- **Anomaly/forecasting techniques**: nothing new beyond the
+  ARIMA_PLUS/Prophet/Snowflake-ML patterns already covered in the 2026-10-18
+  and 2026-10-25 entries — this cycle's search surfaced the same GCP
+  BigQuery ML, Databricks system-table, and Snowflake native-anomaly
+  approaches, still ML-pipeline-shaped rather than suited to this
+  dashboard's simple SQL z-score.
+
+Sources: [GitHub Copilot impact dashboard — industry comparisons](https://github.blog/changelog/2026-10-22-industry-comparisons-in-the-copilot-impact-dashboard), [Claude Code 2.1.317 — gateway cost report and blocking Agent SDK hooks (third-party tracker)](https://ai-tldr.dev/releases/anthropic-claude-code-2-1-317/).
