@@ -778,3 +778,47 @@ techniques.
   dashboard's simple SQL z-score.
 
 Sources: [GitHub Copilot impact dashboard — industry comparisons](https://github.blog/changelog/2026-10-22-industry-comparisons-in-the-copilot-impact-dashboard), [Claude Code 2.1.317 — gateway cost report and blocking Agent SDK hooks (third-party tracker)](https://ai-tldr.dev/releases/anthropic-claude-code-2-1-317/).
+
+## Research update - 2026-11-15
+
+Weekly check against this file's last entry (2026-11-08, 7 days prior). Searched
+all five areas: competitor dashboards (GitHub Copilot's admin surface, Cursor,
+minware, Sourcegraph Cody, Claude Code's own analytics/changelog, ccusage),
+engineering-intelligence platforms (LinearB, Jellyfish, DX, Swarmia, DORA),
+AI-coding productivity research, freelance billing tools (Bonsai, HoneyBook,
+Dubsado, Ignition/Practice Ignition), and simple anomaly/forecasting
+techniques. Nothing found this cycle post-dates this file's tracking window
+and materially updates what's already recorded above.
+
+- **Competitor dashboards**: no change to GitHub Copilot's impact dashboard
+  beyond the 22 Oct 2026 industry-comparison section already recorded in the
+  2026-11-08 entry. Claude Code shipped v2.1.318 (sign-in expiry warnings,
+  repo-free cloud sessions) and v2.1.319 (background MCP tasks, auto-mode
+  behavior behind gateways, a `denyInsteadOfPrompting` setting) in early
+  November — all CLI/agent-workflow ergonomics, not analytics or billing
+  surfaces, so out of scope the same way prior entries excluded similar CLI
+  point releases. Cursor's dashboard changes found this week (a cost-detail
+  regression, a Models/Other-Models usage-tab split) are dated back to
+  May–August 2026, not new. Sourcegraph Cody, minware, and ccusage turned up
+  nothing dated after 8 Nov 2026.
+- **Engineering-intelligence platforms**: no new report from LinearB,
+  Jellyfish, DX, or Swarmia this cycle. A widely-circulated claim that
+  Gartner named LinearB, Jellyfish, and Atlassian DX "Leaders" in its first
+  Magic Quadrant for Developer Productivity Insight Platforms dates to May
+  2026 — predates this file's tracking window, not a new finding.
+- **AI-coding productivity research**: nothing new. The Stanford
+  Denisov-Blanch study already flagged as unconfirmed in the 2026-10-25 and
+  2026-11-01 entries resurfaced again this week with yet another conflicting
+  figure (~7-9%, vs. that entry's "~15-20% net" and this file's prior
+  "~7-9%" note) — still not reliable enough to cite as a number. METR, the
+  Harvard/Jellyfish study, and the NBER "741% more code" paper are the same
+  findings already cited in the 2026-08-23, 2026-11-01, and 2026-09-13
+  entries respectively, just recirculating.
+- **Freelance billing tools**: Bonsai, HoneyBook, Dubsado, and
+  Ignition/Practice Ignition confirmed still shipped no AI-coding-specific
+  billing feature — unchanged from every prior check in this file.
+- **Anomaly/forecasting techniques**: nothing new beyond the ARIMA_PLUS/
+  Prophet/Snowflake-native-detector/Databricks-system-table patterns already
+  covered in the 2026-10-18 and 2026-10-25 entries.
+
+No commit-worthy update found this cycle beyond this note.
